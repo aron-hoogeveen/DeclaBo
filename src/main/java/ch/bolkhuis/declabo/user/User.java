@@ -19,11 +19,13 @@ import java.util.Objects;
  */
 public class User {
 
-    private final long id;
-    private final @NotNull String email;
-    private final @NotNull String name;
-    private final @NotNull String surname;
-    private final @Nullable String nickname;
+    private @NotNull Long id;
+    private @NotNull String email;
+    private @NotNull String name;
+    private @NotNull String surname;
+    private @Nullable String nickname;
+
+    private User() {}
 
     /**
      * Constructs a new User.
@@ -64,20 +66,47 @@ public class User {
         this.nickname = nickname;
     }
 
+    private void setId(long id) {
+        this.id = id;
+    }
+
     public long getId() {
+        assert id != null;
         return id;
     }
 
+    private void setEmail(@NotNull String email) {
+        Objects.requireNonNull(email, "Parameter 'email' must not be null");
+        this.email = email;
+    }
+
     public @NotNull String getEmail() {
+        assert email != null;
         return email;
     }
 
+    private void setName(@NotNull String name) {
+        Objects.requireNonNull(name, "Parameter 'name' must not be null");
+        this.name = name;
+    }
+
     public @NotNull String getName() {
+        assert name != null;
         return name;
     }
 
+    private void setSurname(@NotNull String surname) {
+        Objects.requireNonNull(surname, "Parameter 'surname' must not be null");
+        this.surname = surname;
+    }
+
     public @NotNull String getSurname() {
+        assert surname != null;
         return surname;
+    }
+
+    private void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public @Nullable String getNickname() {
@@ -156,5 +185,132 @@ public class User {
                 + ", surname='" + surname + '\''
                 + ", nickname='" + nickname + '\''
                 + '}';
+    }
+
+    /**
+     * Returns a {@code User} builder.
+     *
+     * @return a Builder for a {@code User}
+     */
+    public static @NotNull Builder builder() {
+        return new Builder();
+    }
+
+    /**
+     * Returns a {@code User} builder. The fields of the encapsulated user are set to equal the
+     * fields of the provided {@code user}. A shallow copy is made.
+     *
+     * @param user the user to copy the fields from
+     * @return a Builder for a {@code User}
+     * @throws NullPointerException if {@code user} is null
+     */
+    public static @NotNull Builder builder(@NotNull User user) {
+        Objects.requireNonNull(user, "The user must not be null");
+        return new Builder(user);
+    }
+
+    /**
+     * Builder class for a {@link User} object.
+     */
+    public static class Builder {
+
+        private transient @NotNull User user;
+
+        private Builder() {
+            this.user = new User();
+        }
+
+        private Builder(User user) {
+            this.user = new User();
+            this.user.id = user.id;
+            this.user.email = user.email;
+            this.user.name = user.name;
+            this.user.surname = user.surname;
+            this.user.nickname = user.nickname;
+        }
+
+        public Builder setId(long id) {
+            user.id = id;
+            return this;
+        }
+
+        public Builder setEmail(String email) {
+            user.email = email;
+            return this;
+        }
+
+        public Builder setName(String name) {
+            user.name = name;
+            return this;
+        }
+
+        public Builder setSurname(String surname) {
+            user.surname = surname;
+            return this;
+        }
+
+        public Builder setNickname(String nickname) {
+            user.nickname = nickname;
+            return this;
+        }
+
+        /**
+         * Validates the provided user.
+         *
+         * <p>A user is considered valid if:
+         * <ul>
+         *     <li>{@code id} is set;</li>
+         *     <li>{@code email} is set;</li>
+         *     <li>{@code email} is a valid email;</li>
+         *     <li>{@code name} is set;</li>
+         *     <li>{@code name} is a valid name;</li>
+         *     <li>{@code surname} is set;</li>
+         *     <li>{@code surname} is a valid name;</li>
+         *     <li>if {@code nickname} is set, it is a valid name.</li>
+         * </ul>
+         *
+         * @param user the User to validate
+         * @throws IllegalStateException if the state of the embedded user is illegal
+         */
+        private void validateUser(User user) {
+            if (user.id == null) {
+                throw new IllegalStateException("Field 'id' is not set");
+            }
+            if (user.email == null) {
+                throw new IllegalStateException("Field 'email' is not set");
+            }
+            if (!isValidEmail(user.email)) {
+                throw new IllegalStateException("Field 'email' is not a valid email");
+            }
+            if (user.name == null) {
+                throw new IllegalStateException("Field 'name' is not set");
+            }
+            if (!isValidName(user.name)) {
+                throw new IllegalStateException("Field 'name' is not a valid name");
+            }
+            if (user.surname == null) {
+                throw new IllegalStateException("Field 'surname' is not set");
+            }
+            if (!isValidName(user.surname)) {
+                throw new IllegalStateException("Field 'surname' is not a valid name");
+            }
+            if (user.nickname != null && !isValidName(user.nickname)) {
+                throw new IllegalStateException("Field 'nickname' is not a valid name");
+            }
+        }
+
+        /**
+         * Builds the user that is encapsulated by this {@code Builder}. If the building succeeds
+         * the encapsulated user is reset, so that this builder can be reused.
+         *
+         * @return the encapsulated user
+         * @throws IllegalStateException if the user is in an illegal state
+         */
+        public @NotNull User build() {
+            validateUser(user);
+            User buildUser = user;
+            user = new User();
+            return buildUser;
+        }
     }
 }
