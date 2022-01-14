@@ -4,6 +4,14 @@ import org.jetbrains.annotations.NotNull;
 
 public class CreditFund extends AbstractFund {
 
+    /**
+     * Construct a new {@code CreditFund}.
+     *
+     * @param id      the id
+     * @param name    the name, must be non-null
+     * @param balance the balance
+     * @throws NullPointerException if {@code name} is null
+     */
     public CreditFund(Long id, @NotNull String name, long balance) {
         super(id, name, balance);
     }
