@@ -1,0 +1,30 @@
+package ch.bolkhuis.declabo.user;
+
+import ch.bolkhuis.declabo.fund.CreditFund;
+import ch.bolkhuis.declabo.fund.Fund;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+public class FundUserTest {
+
+    private static final transient long ID = 1L;
+    private static final transient String EMAIL = "hendrik@bolkhuis.ch";
+    private static final transient String NAME = "Hendrik";
+    private static final transient String SURNAME = "Troelala";
+    private static final transient String NICKNAME = null;
+    private static final transient Fund FUND = new CreditFund(0L, "HendrikFund", 0L);
+
+    @Test
+    public void test_constructor() {
+        new FundUser(ID, EMAIL, NAME, SURNAME, NICKNAME, FUND);
+        Assertions.assertThrows(NullPointerException.class, () ->
+                new FundUser(ID, EMAIL, NAME, SURNAME, NICKNAME, null)
+        );
+    }
+
+    @Test
+    public void test_getters() {
+        FundUser fundUser = new FundUser(ID, EMAIL, NAME, SURNAME, NICKNAME, FUND);
+        Assertions.assertEquals(FUND, fundUser.getFund());
+    }
+}
