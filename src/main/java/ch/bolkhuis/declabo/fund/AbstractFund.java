@@ -55,4 +55,26 @@ public abstract class AbstractFund implements Fund {
     private void setName(@NotNull String name) {
         this.name = Objects.requireNonNull(name);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AbstractFund that = (AbstractFund) o;
+
+        return name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "AbstractFund{"
+                + "name='" + name + '\''
+                + '}';
+    }
 }

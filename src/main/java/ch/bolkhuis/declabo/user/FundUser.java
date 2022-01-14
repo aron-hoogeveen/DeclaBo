@@ -48,4 +48,29 @@ public class FundUser extends SimpleUser {
     private void setFund(@NotNull Fund fund) {
         this.fund = Objects.requireNonNull(fund);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        FundUser fundUser = (FundUser) o;
+
+        return fund.equals(fundUser.fund);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + fund.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "FundUser{"
+                + "name=" + getName()
+                + '}';
+    }
 }
