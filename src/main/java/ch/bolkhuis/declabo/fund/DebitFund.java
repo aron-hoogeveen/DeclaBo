@@ -42,4 +42,15 @@ public class DebitFund extends AbstractFund {
         this.balance -= amount;
         return this.balance;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!super.equals(o)) return false;
+        return (o instanceof DebitFund);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }
