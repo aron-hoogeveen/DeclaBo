@@ -10,7 +10,7 @@ public interface Fund {
      *
      * @return the id
      */
-    long getId();
+    Long getId();
 
     /**
      * Gets the balance of this {@code Fund}. The balance is returned in euro cents.

@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CreditFund extends AbstractFund {
 
-    public CreditFund(long id, @NotNull String name, long balance) {
+    public CreditFund(Long id, @NotNull String name, long balance) {
         super(id, name, balance);
     }
 

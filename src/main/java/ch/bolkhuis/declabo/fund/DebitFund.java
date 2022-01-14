@@ -12,7 +12,7 @@ public class DebitFund extends AbstractFund {
      * @param balance the balance
      * @throws NullPointerException if {@code name} is null
      */
-    public DebitFund(long id, @NotNull String name, long balance) {
+    public DebitFund(Long id, @NotNull String name, long balance) {
         super(id, name, balance);
     }
 

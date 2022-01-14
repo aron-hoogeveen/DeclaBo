@@ -20,7 +20,7 @@ import java.util.Optional;
  */
 public class SimpleUser implements User {
 
-    private Long id;
+    private @Nullable Long id;
     private @NotNull String email;
     private @NotNull String name;
     private @NotNull String surname;
@@ -41,8 +41,13 @@ public class SimpleUser implements User {
      * @throws IllegalArgumentException if {@code name}, {@code surname} is not a valid name, or if
      *     {@code nickname} is non-null and not a valid name
      */
-    public SimpleUser(Long id, @NotNull String email, @NotNull String name, @NotNull String surname,
-                      @Nullable String nickname) {
+    public SimpleUser(
+            @Nullable Long id,
+            @NotNull String email,
+            @NotNull String name,
+            @NotNull String surname,
+            @Nullable String nickname
+    ) {
         Objects.requireNonNull(email, "A user must have an email");
         Objects.requireNonNull(name, "A user must have a name");
         Objects.requireNonNull(surname, "A user must have a surname");
@@ -67,11 +72,11 @@ public class SimpleUser implements User {
         this.nickname = nickname;
     }
 
-    private void setId(long id) {
+    private void setId(@Nullable Long id) {
         this.id = id;
     }
 
-    public long getId() {
+    public @Nullable Long getId() {
         return id;
     }
 

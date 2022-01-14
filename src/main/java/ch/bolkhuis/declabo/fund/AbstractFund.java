@@ -1,12 +1,13 @@
 package ch.bolkhuis.declabo.fund;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
 public abstract class AbstractFund implements Fund {
 
-    private long id;
+    private @Nullable Long id;
     private @NotNull String name;
     protected long balance;
 
@@ -22,18 +23,18 @@ public abstract class AbstractFund implements Fund {
      * @param balance the balance
      * @throws NullPointerException if {@code name} is null
      */
-    public AbstractFund(long id, @NotNull String name, long balance) {
+    public AbstractFund(@Nullable Long id, @NotNull String name, long balance) {
         this.id = id;
         this.name = Objects.requireNonNull(name);
         this.balance = balance;
     }
 
     @Override
-    public long getId() {
+    public @Nullable Long getId() {
         return this.id;
     }
 
-    private void setId(long id) {
+    private void setId(@Nullable Long id) {
         this.id = id;
     }
 
