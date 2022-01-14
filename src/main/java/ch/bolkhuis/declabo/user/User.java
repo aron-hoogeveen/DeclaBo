@@ -9,7 +9,7 @@ public interface User {
      *
      * @return the id
      */
-    long getId();
+    Long getId();
 
     /**
      * Gets the email of this {@code User}.

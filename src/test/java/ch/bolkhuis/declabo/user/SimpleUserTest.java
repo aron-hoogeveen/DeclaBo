@@ -10,7 +10,7 @@ import java.util.Optional;
  */
 public class SimpleUserTest {
 
-    private static final transient long ID = 0L;
+    private static final transient Long ID = 0L;
     private static final transient String EMAIL = "hendrik@bolkhuis.ch";
     private static final transient String NAME = "Hendrik";
     private static final transient String NICKNAME = "Gekke Hendrik";
