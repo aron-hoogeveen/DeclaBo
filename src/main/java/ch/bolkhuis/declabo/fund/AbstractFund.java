@@ -33,13 +33,25 @@ public abstract class AbstractFund implements Fund {
         return this.id;
     }
 
+    private void setId(long id) {
+        this.id = id;
+    }
+
     @Override
     public long getBalance() {
         return this.balance;
     }
 
+    private void setBalance(long balance) {
+        this.balance = balance;
+    }
+
     @Override
     public @NotNull String getName() {
         return this.name;
+    }
+
+    private void setName(@NotNull String name) {
+        this.name = Objects.requireNonNull(name);
     }
 }

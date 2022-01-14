@@ -17,6 +17,7 @@ public class DebitFund extends AbstractFund {
     }
 
 
+    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
     @Override
     public long debit(long amount) {
         if (amount < 0L) {
@@ -29,6 +30,7 @@ public class DebitFund extends AbstractFund {
         return this.balance;
     }
 
+    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
     @Override
     public long credit(long amount) {
         if (amount < 0L) {

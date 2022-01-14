@@ -8,6 +8,7 @@ public class CreditFund extends AbstractFund {
         super(id, name, balance);
     }
 
+    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
     @Override
     public long debit(long amount) {
         if (amount < 0L) {
@@ -20,6 +21,7 @@ public class CreditFund extends AbstractFund {
         return this.balance;
     }
 
+    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
     @Override
     public long credit(long amount) {
         if (amount < 0L) {
