@@ -27,4 +27,14 @@ public class FundUserTest {
         FundUser fundUser = new FundUser(ID, EMAIL, NAME, SURNAME, NICKNAME, FUND);
         Assertions.assertEquals(FUND, fundUser.getFund());
     }
+
+    @Test
+    public void test_equals() {
+        FundUser fundUser1 = new FundUser(ID, EMAIL, NAME, SURNAME, NICKNAME, FUND);
+        FundUser fundUser2 = new FundUser(ID, EMAIL, NAME, SURNAME, NICKNAME, FUND);
+        FundUser fundUser3 = new FundUser(ID, EMAIL, NAME, SURNAME, "different nickname", FUND);
+
+        Assertions.assertEquals(fundUser1, fundUser2);
+        Assertions.assertNotEquals(fundUser1, fundUser3);
+    }
 }
