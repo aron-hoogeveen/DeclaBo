@@ -71,7 +71,6 @@ public class User {
     }
 
     public long getId() {
-        assert id != null;
         return id;
     }
 
@@ -81,7 +80,6 @@ public class User {
     }
 
     public @NotNull String getEmail() {
-        assert email != null;
         return email;
     }
 
@@ -91,7 +89,6 @@ public class User {
     }
 
     public @NotNull String getName() {
-        assert name != null;
         return name;
     }
 
@@ -101,11 +98,10 @@ public class User {
     }
 
     public @NotNull String getSurname() {
-        assert surname != null;
         return surname;
     }
 
-    private void setNickname(String nickname) {
+    private void setNickname(@Nullable String nickname) {
         this.nickname = nickname;
     }
 
