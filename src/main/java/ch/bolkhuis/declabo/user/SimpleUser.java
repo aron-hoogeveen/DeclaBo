@@ -129,8 +129,8 @@ public class SimpleUser implements User {
     /**
      * Returns whether the provided String is a valid email. The checks for a valid email address
      * are very lenient and most likely not enough to catch invalid email addresses. The service
-     * that will use this SimpleUser class must make sure it does proper validation (e.g. by sending an
-     * activation mail).
+     * that will use this SimpleUser class must make sure it does proper validation (e.g. by sending
+     * an activation mail).
      *
      * @param str the String to check
      * @return {@code true} if the email is non-null and non-blank, {@code false} otherwise
