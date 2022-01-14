@@ -137,7 +137,7 @@ Each of the attendants now gets an email or notification that the event has been
 ### Settling the Reckoning
 **Actor**: Admin, CFO  
 **Parties**: Admin, CFO, PayingHousemates  
-**Story**: The CFO navigates to [https://declabo.bolkhuis.ch/admin/settlements/create](https://declabo.bolkhuis.ch/admin/settlements/create) and is presented with settlement page. On this page the CFO can select all PayingHousemates to create an invoice for. Furthermore, it can select a starting and ending date for which all submissions/transactions in that timespan (excluding ones that belong to an event) will be considered. If in the past a settlement has already been made, the starting date will be one day later than the previous ending date. Otherwise, all qualifying submissions/transactions up to and including the ending date will be considered. For each of the submissions a single place-holder transaction is created, and together with the standalone transactions an invoice is created per PayingHousemate. If all invoices are created the PayingHousemates get an email containing the invoice and the request to pay up if their balance is negative.
+**Story**: The CFO navigates to [https://declabo.bolkhuis.ch/admin/settlements/create](https://declabo.bolkhuis.ch/admin/settlements/create) and is presented with settlement page. They can select a starting and ending date for which all submissions/transactions in that timespan (excluding ones that belong to an event) will be considered. If in the past a settlement has already been made, the starting date will be one day later than the previous ending date. Otherwise, all qualifying submissions/transactions up to and including the ending date will be considered. A settlement creates invoices for all the PayingHousemates. For each of the submissions a single place-holder transaction is created, and together with the standalone transactions an invoice is created per PayingHousemate. If all invoices are created the PayingHousemates get an email containing the invoice and the request to pay up if their balance is negative.
 
 # Notes
 ## Types of Users and AccountingEntities
@@ -149,6 +149,8 @@ There should be an `admin` role.
 
 A user might have multiple roles.
 
+A normal user is only allowed to create submissions for themselves, or some pre-determined funds (e.g. ing-bankrekening)
+
 ## Invoice
 For every invoice the following information should be saved:
  - Date;
@@ -156,3 +158,6 @@ For every invoice the following information should be saved:
  - (optional) event;
  - Payment reference;
  - Paid (if the invoice has been paid or not).
+
+## Settlement
+A settlement must create invoices for *all* housemates. This way, a housemate can never be missed when creating the invoices.
