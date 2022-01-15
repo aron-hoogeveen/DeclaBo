@@ -28,8 +28,8 @@ public class Submission {
     private @Nullable Event event;
 
     private Submission() {
-        this.transactions = new HashSet<>();
-        this.attachments = new HashSet<>();
+        this.transactions = Set.of();
+        this.attachments = Set.of();
     }
 
     public @Nullable Long getId() {
@@ -94,11 +94,11 @@ public class Submission {
      * @return the transactions
      */
     public @NotNull Set<Transaction> getTransactions() {
-        return Set.copyOf(transactions);
+        return transactions;
     }
 
     private void setTransactions(@NotNull Set<Transaction> transactions) {
-        this.transactions = Objects.requireNonNull(transactions);
+        this.transactions = Set.copyOf(Objects.requireNonNull(transactions));
     }
 
     /**
@@ -107,11 +107,11 @@ public class Submission {
      * @return the attachments
      */
     public @NotNull Set<URI> getAttachments() {
-        return Set.copyOf(attachments);
+        return attachments;
     }
 
     private void setAttachments(@NotNull Set<URI> attachments) {
-        this.attachments = Objects.requireNonNull(attachments);
+        this.attachments = Set.copyOf(Objects.requireNonNull(attachments));
     }
 
     public boolean isProcessed() {
@@ -235,13 +235,35 @@ public class Submission {
             return this;
         }
 
+        /**
+         * Sets the transactions. If {@code transactions} is non-null, then the set will be copied
+         * over to a new unmodifiable set.
+         *
+         * @param transactions the transactions
+         * @return this Builder
+         */
         public Builder setTransactions(Set<Transaction> transactions) {
-            this.obj.transactions = transactions;
+            if (transactions != null) {
+                this.obj.transactions = Set.copyOf(transactions);
+            } else {
+                this.obj.transactions = transactions;
+            }
             return this;
         }
 
+        /**
+         * Sets the attachments. If {@code attachments} is non-null, then the set will be copied
+         * over to a new unmodifiable set.
+         *
+         * @param attachments the attachments
+         * @return this Builder
+         */
         public Builder setAttachments(Set<URI> attachments) {
-            this.obj.attachments = attachments;
+            if (attachments != null) {
+                this.obj.attachments = Set.copyOf(attachments);
+            } else {
+                this.obj.attachments = attachments;
+            }
             return this;
         }
 
