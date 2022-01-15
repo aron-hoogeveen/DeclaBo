@@ -88,16 +88,26 @@ public class Submission {
         this.createdOn = Objects.requireNonNull(createdOn);
     }
 
+    /**
+     * Gets an unmodifiable copy of the transactions.
+     *
+     * @return the transactions
+     */
     public @NotNull Set<Transaction> getTransactions() {
-        return transactions;
+        return Set.copyOf(transactions);
     }
 
     private void setTransactions(@NotNull Set<Transaction> transactions) {
         this.transactions = Objects.requireNonNull(transactions);
     }
 
+    /**
+     * Gets an unmodifiable copy of the attachments.
+     *
+     * @return the attachments
+     */
     public @NotNull Set<URI> getAttachments() {
-        return attachments;
+        return Set.copyOf(attachments);
     }
 
     private void setAttachments(@NotNull Set<URI> attachments) {
@@ -226,12 +236,12 @@ public class Submission {
         }
 
         public Builder setTransactions(Set<Transaction> transactions) {
-            this.obj.transactions = transactions; // TODO make the set unmodifiable
+            this.obj.transactions = transactions;
             return this;
         }
 
         public Builder setAttachments(Set<URI> attachments) {
-            this.obj.attachments = attachments; // TODO make the set unmodifiable
+            this.obj.attachments = attachments;
             return this;
         }
 
