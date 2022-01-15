@@ -22,12 +22,17 @@ public class SimpleEvent implements Event {
     /**
      * Constructs a new SimpleEvent.
      *
+     * <p>Both the set of {@code attendants} and {@code funds} will be copied over to unmodifiable
+     * sets.
+     *
      * @param id the id
      * @param date the date
      * @param name the name
      * @param description the description
      * @param attendants the attendants
      * @param funds the funds
+     * @throws NullPointerException if {@code date}, {@code name}, {@code description},
+     *     {@code attendants}, or {@code funds} is null
      */
     public SimpleEvent(
             @Nullable Long id,
@@ -44,9 +49,9 @@ public class SimpleEvent implements Event {
                 "Parameter 'description' must not be null");
         Objects.requireNonNull(attendants,
                 "Parameter 'attendants' must not be null");
-        this.attendants = new HashSet<>(attendants);
+        this.attendants = Set.copyOf(attendants);
         Objects.requireNonNull(funds, "Parameter 'funds' must not be null");
-        this.funds = new HashSet<>(funds);
+        this.funds = Set.copyOf(funds);
     }
 
     @Override
@@ -91,7 +96,7 @@ public class SimpleEvent implements Event {
     }
 
     private void setAttendants(@NotNull Set<FundUser> attendants) {
-        this.attendants = attendants;
+        this.attendants = Set.copyOf(Objects.requireNonNull(attendants));
     }
 
     @Override
@@ -100,7 +105,7 @@ public class SimpleEvent implements Event {
     }
 
     private void setFunds(@NotNull Set<EventFund> funds) {
-        this.funds = funds;
+        this.funds = Set.copyOf(Objects.requireNonNull(funds));
     }
 
     @Override
