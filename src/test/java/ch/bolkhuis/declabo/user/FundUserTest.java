@@ -12,7 +12,7 @@ public class FundUserTest {
     private static final transient String NAME = "Hendrik";
     private static final transient String SURNAME = "Troelala";
     private static final transient String NICKNAME = null;
-    private static final transient Fund FUND = new CreditFund(0L, "HendrikFund", 0L);
+    public static final transient Fund FUND = new CreditFund(0L, "HendrikFund", 0L);
 
     @Test
     public void test_constructor() {
