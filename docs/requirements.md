@@ -53,3 +53,4 @@ This document lists all the requirements that are expected from the *DeclaBo* pr
  - The system shall save the generated invoices on the filesystem;
  - The *CFO* shall be able to access the invoices of all users;
  - A user shall be able to access their own invoices.
+ - A user with *CFO* or *admin* role must be able to split an amount evenly over selected funds without having to create a transaction for every fund but instead the system should generate all the transactions (which then have the same description that will be specified by the user).
