@@ -49,6 +49,7 @@
  - Users shall be able to change their password;
  - Users with role `ROLE_ADMIN` will be able to block other users from logging in;
  - Users with role `ROLE_ADMIN` will always be able to log in;
+ - The system shall keep track of the most-recent date that is included in the last settlement;
 
 ### Should-Have
  - Users shall be able to look up at least the past 4 settlements they attended;
