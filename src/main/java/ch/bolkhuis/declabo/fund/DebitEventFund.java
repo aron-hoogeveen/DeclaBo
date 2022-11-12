@@ -1,34 +1,45 @@
 package ch.bolkhuis.declabo.fund;
 
-import ch.bolkhuis.declabo.event.Event;
-import org.jetbrains.annotations.NotNull;
+import javax.persistence.Entity;
 
-import java.util.Objects;
-
-public class DebitEventFund extends DebitFund implements EventFund {
-
-    private @NotNull Event event;
+@Entity
+public class DebitEventFund extends EventFund {
 
     /**
-     * Construct a new {@code DebitFund}.
+     * Debit this DebitEventFund.
      *
-     * @param id      the id
-     * @param name    the name, must be non-null
-     * @param balance the balance
-     * @param event the event
-     * @throws NullPointerException if {@code name} or {@code event} is null
+     * increases the balance of this DebitEventFund by {@code amount}.
+     *
+     * @param amount the amount to add
+     * @return the new balance
      */
-    public DebitEventFund(Long id, @NotNull String name, long balance, @NotNull Event event) {
-        super(id, name, balance);
-        this.event = Objects.requireNonNull(event, "Parameter 'event' must not be null");
+    @Override
+    public long debit(long amount) {
+        // FIXME add overflow/underflow protection
+        if (amount < 0L) throw new IllegalArgumentException("Cannot debit negative amount");
+        balance += amount;
+        return balance;
+    }
+
+    /**
+     * Credit this DebitEventFund.
+     *
+     * Decrease the balance of this DebitEventFund by {@code amount}.
+     *
+     * @param amount the amount to subtract
+     * @return the new balance
+     */
+    @Override
+    public long credit(long amount) {
+        // FIXME add overflow/underflow protection
+        if (amount < 0L) throw new IllegalArgumentException("Cannot credit negative amount");
+        balance -= amount;
+        return balance;
     }
 
     @Override
-    public @NotNull Event getEvent() {
-        return event;
+    protected String getIdString() {
+        return "DebitEventFund";
     }
 
-    private void setEvent(@NotNull Event event) {
-        this.event = event;
-    }
 }

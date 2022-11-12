@@ -1,34 +1,45 @@
 package ch.bolkhuis.declabo.fund;
 
-import ch.bolkhuis.declabo.event.Event;
-import org.jetbrains.annotations.NotNull;
+import javax.persistence.Entity;
 
-import java.util.Objects;
-
-public class CreditEventFund extends CreditFund implements EventFund {
-
-    private @NotNull Event event;
+@Entity
+public class CreditEventFund extends EventFund {
 
     /**
-     * Construct a new {@code CreditFund}.
+     * Debit this CreditEventFund.
      *
-     * @param id      the id
-     * @param name    the name, must be non-null
-     * @param balance the balance
-     * @param event the event
-     * @throws NullPointerException if {@code name} is null
+     * Decrease the balance of this CreditEventFund by {@code amount}.
+     *
+     * @param amount the amount to subtract
+     * @return the new balance
      */
-    public CreditEventFund(Long id, @NotNull String name, long balance, @NotNull Event event) {
-        super(id, name, balance);
-        this.event = Objects.requireNonNull(event, "Parameter 'event' must not be null");
+    @Override
+    public long debit(long amount) {
+        // FIXME add overflow/underflow protection
+        if (amount < 0L) throw new IllegalArgumentException("Cannot debit negative amount");
+        balance -= amount;
+        return balance;
+    }
+
+    /**
+     * Credit this CreditEventFund.
+     *
+     * Increase the balance of this CreditEventFund by {@code amount}.
+     *
+     * @param amount the amount to add
+     * @return the new balance
+     */
+    @Override
+    public long credit(long amount) {
+        // FIXME add overflow/underflow protection
+        if (amount < 0L) throw new IllegalArgumentException("Cannot credit negative amount");
+        balance += amount;
+        return balance;
     }
 
     @Override
-    public @NotNull Event getEvent() {
-        return this.event;
+    protected String getIdString() {
+        return "CreditEventFund";
     }
 
-    private void setEvent(@NotNull Event event) {
-        this.event = Objects.requireNonNull(event);
-    }
 }
