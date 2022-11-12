@@ -7,4 +7,5 @@
 <suppressions>
     <suppress checks="CustomImportOrder" />
     <suppress checks="NeedBraces" />
+    <suppress checks="JavadocParagraph" />
 </suppressions>

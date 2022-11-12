@@ -44,6 +44,9 @@ public class User {
     /** Default constructor. Should not be used. Is here only for Spring */
     protected User() {}
 
+    /**
+     * Constructs a new User.
+     */
     public User(String email, String name, String surname, int room) {
         if (room < 0) throw new IllegalArgumentException("Room must be a positive number");
 

@@ -7,6 +7,12 @@ public class DebitFund extends Fund {
 
     protected static String toStringID = "DebitFund";
 
+    protected DebitFund() {}
+
+    public DebitFund(String name, long balance) {
+        super(name, balance);
+    }
+
     /**
      * Debit this DebitFund.
      *

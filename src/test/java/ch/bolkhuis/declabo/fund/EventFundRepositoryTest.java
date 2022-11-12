@@ -1,0 +1,53 @@
+package ch.bolkhuis.declabo.fund;
+
+import ch.bolkhuis.declabo.event.Event;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@DataJpaTest(showSql = false)
+public class EventFundRepositoryTest {
+
+    @Autowired
+    private TestEntityManager entityManager;
+
+    @Autowired
+    public EventFundRepository repository;
+
+    @Test
+    public void should_find_no_funds_if_repository_is_empty() {
+        Iterable<EventFund> funds = repository.findAll();
+
+        assertThat(funds).isEmpty();
+    }
+
+    @Test
+    public void should_store_an_eventfund() {
+        String name = "Event Fund";
+        long balance = 36L;
+        Event event = entityManager.persist(new Event(1L));
+        EventFund fund = repository.save(new CreditEventFund(name, balance, event));
+
+        assertThat(fund).hasFieldOrPropertyWithValue("name", name);
+        assertThat(fund).hasFieldOrPropertyWithValue("balance", balance);
+        assertThat(fund).hasFieldOrPropertyWithValue("event", event);
+    }
+
+    @Test
+    public void should_find_all_eventfunds() {
+        Event event = entityManager.persist(new Event(2L));
+
+        EventFund f1 = new CreditEventFund("Event Fund 1", 2L, event);
+        entityManager.persist(f1);
+
+        EventFund f2 = new DebitEventFund("Event Fund 2", 3L, event);
+        entityManager.persist(f2);
+
+        Iterable<EventFund> funds = repository.findAll();
+        assertThat(funds).hasSize(2).contains(f1, f2);
+    }
+
+}

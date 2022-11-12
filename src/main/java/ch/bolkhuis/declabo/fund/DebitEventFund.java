@@ -1,9 +1,17 @@
 package ch.bolkhuis.declabo.fund;
 
+import ch.bolkhuis.declabo.event.Event;
+
 import javax.persistence.Entity;
 
 @Entity
 public class DebitEventFund extends EventFund {
+
+    protected DebitEventFund() {}
+
+    public DebitEventFund(String name, long balance, Event event) {
+        super(name, balance, event);
+    }
 
     /**
      * Debit this DebitEventFund.

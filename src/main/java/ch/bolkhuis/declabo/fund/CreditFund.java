@@ -5,6 +5,12 @@ import javax.persistence.Entity;
 @Entity
 public class CreditFund extends Fund {
 
+    protected CreditFund() {}
+
+    public CreditFund(String name, long balance) {
+        super(name, balance);
+    }
+
     /**
      * Debit this CreditFund.
      *
