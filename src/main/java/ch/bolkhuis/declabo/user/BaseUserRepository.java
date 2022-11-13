@@ -9,7 +9,8 @@ public interface BaseUserRepository<T extends User> extends JpaRepository<T, Lon
 
     List<T> findBySurname(String surname);
 
-    T findByNameAndSurname(String name, String surname); // there is a unique constraint on {name,surname}
+    // there is a unique constraint on {name,surname}
+    T findByNameAndSurname(String name, String surname);
 
     T findByRoom(int room);
 }

@@ -33,6 +33,10 @@ public class FundUser extends User {
         return fund;
     }
 
+    public void setFund(@NonNull CreditFund fund) {
+        this.fund = Objects.requireNonNull(fund);
+    }
+
     @Override
     protected String getIdString() {
         return "FundUser";

@@ -28,6 +28,10 @@ public abstract class EventFund extends Fund {
         return event;
     }
 
+    public void setEvent(@NonNull Event event) {
+        this.event = Objects.requireNonNull(event);
+    }
+
     public abstract long debit(long amount);
 
     public abstract long credit(long amount);

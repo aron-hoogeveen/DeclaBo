@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("PMD")
 @DataJpaTest(showSql = false)
 public class EventFundRepositoryTest {
 

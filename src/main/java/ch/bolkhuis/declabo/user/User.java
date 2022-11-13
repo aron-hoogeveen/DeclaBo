@@ -60,9 +60,17 @@ public class User {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @NonNull
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(@NonNull String email) {
+        this.email = Objects.requireNonNull(email);
     }
 
     @NonNull
@@ -70,13 +78,25 @@ public class User {
         return name;
     }
 
+    public void setName(@NonNull String name) {
+        this.name = Objects.requireNonNull(name);
+    }
+
     @NonNull
     public String getSurname() {
         return surname;
     }
 
+    public void setSurname(@NonNull String surname) {
+        this.surname = Objects.requireNonNull(surname);
+    }
+
     public int getRoom() {
         return room;
+    }
+
+    public void setRoom(int room) {
+        this.room = room;
     }
 
     @Override

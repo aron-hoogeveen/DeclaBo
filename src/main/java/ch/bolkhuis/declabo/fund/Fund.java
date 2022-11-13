@@ -38,13 +38,25 @@ public abstract class Fund {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @NonNull
     public String getName() {
         return name;
     }
 
+    public void setName(@NonNull String name) {
+        this.name = Objects.requireNonNull(name);
+    }
+
     public long getBalance() {
         return balance;
+    }
+
+    public void setBalance(long balance) {
+        this.balance = balance;
     }
 
     public abstract long debit(long amount);

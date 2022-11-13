@@ -70,4 +70,6 @@ checkstyle {
 
 pmd {
     incrementalAnalysis = true
+    ruleSetFiles = files("${rootDir}/config/pmd/pmd-ruleset.xml")
+    ruleSets = []
 }
