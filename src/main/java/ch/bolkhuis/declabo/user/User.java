@@ -15,12 +15,10 @@ import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED) // we want null constraints
-@Table(uniqueConstraints =
+@Table(name = "custom_user", uniqueConstraints =
     @UniqueConstraint(columnNames = {"name", "surname"})
 )
 public class User {
-
-    private static final String idString = "User";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

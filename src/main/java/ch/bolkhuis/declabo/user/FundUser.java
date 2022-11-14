@@ -3,8 +3,10 @@ package ch.bolkhuis.declabo.user;
 import ch.bolkhuis.declabo.fund.CreditFund;
 import org.springframework.lang.NonNull;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import java.util.Objects;
@@ -13,7 +15,7 @@ import java.util.Objects;
 public class FundUser extends User {
 
     @NonNull
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "fund_id")
     protected CreditFund fund;
 
@@ -40,6 +42,11 @@ public class FundUser extends User {
     @Override
     protected String getIdString() {
         return "FundUser";
+    }
+
+    public static FundUser getTestUser() {
+        CreditFund fund = new CreditFund("Aron Hoogeveen", 420L);
+        return new FundUser("aron@bolkhuis.ch", "Aron", "Hoogeveen", 101, fund);
     }
 
 }
