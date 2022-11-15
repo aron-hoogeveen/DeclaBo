@@ -1,6 +1,10 @@
-package ch.bolkhuis.declabo.fund;
+package ch.bolkhuis.declabo.event;
 
 import ch.bolkhuis.declabo.event.Event;
+import ch.bolkhuis.declabo.fund.CreditEventFund;
+import ch.bolkhuis.declabo.fund.DebitEventFund;
+import ch.bolkhuis.declabo.fund.EventFund;
+import ch.bolkhuis.declabo.fund.EventFundRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

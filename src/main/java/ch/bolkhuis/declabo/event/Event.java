@@ -6,6 +6,7 @@ import org.springframework.lang.NonNull;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,11 +35,12 @@ public class Event {
     protected String description;
 
     @NonNull
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     protected Set<FundUser> attendants;
 
     @NonNull
-    @OneToMany // we can use OneToMany here, since there will probably never be an event with a
+    @OneToMany(fetch = FetchType.LAZY)
+               // we can use OneToMany here, since there will probably never be an event with a
                // shitload of EventFunds
     protected Set<EventFund> funds;
 
