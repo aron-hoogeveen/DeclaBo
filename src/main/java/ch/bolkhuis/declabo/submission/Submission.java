@@ -1,6 +1,5 @@
 package ch.bolkhuis.declabo.submission;
 
-import ch.bolkhuis.declabo.attachment.Attachment;
 import ch.bolkhuis.declabo.event.Event;
 import ch.bolkhuis.declabo.user.FundUser;
 import org.jetbrains.annotations.NotNull;
@@ -13,12 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import java.net.URI;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 public class Submission {
@@ -66,6 +61,78 @@ public class Submission {
         this.name = Objects.requireNonNull(name);
         this.remarks = remarks;
         this.processed = processed;
+        this.settled = settled;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public LocalDate getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(LocalDate createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public FundUser getPayedBy() {
+        return payedBy;
+    }
+
+    public void setPayedBy(FundUser payedBy) {
+        this.payedBy = payedBy;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public boolean isProcessed() {
+        return processed;
+    }
+
+    public void setProcessed(boolean processed) {
+        this.processed = processed;
+    }
+
+    public boolean isSettled() {
+        return settled;
+    }
+
+    public void setSettled(boolean settled) {
         this.settled = settled;
     }
 

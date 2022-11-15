@@ -1,6 +1,6 @@
 package ch.bolkhuis.declabo.user;
 
-import org.springframework.lang.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,15 +24,15 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @NonNull
+    @NotNull
     @Column(nullable = false, unique = true)
     protected String email;
 
-    @NonNull
+    @NotNull
     @Column(nullable = false, updatable = false)
     protected String name;
 
-    @NonNull
+    @NotNull
     @Column(nullable = false, updatable = false)
     protected String surname;
 
@@ -62,30 +62,30 @@ public class User {
         this.id = id;
     }
 
-    @NonNull
+    @NotNull
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(@NonNull String email) {
+    public void setEmail(@NotNull String email) {
         this.email = Objects.requireNonNull(email);
     }
 
-    @NonNull
+    @NotNull
     public String getName() {
         return name;
     }
 
-    public void setName(@NonNull String name) {
+    public void setName(@NotNull String name) {
         this.name = Objects.requireNonNull(name);
     }
 
-    @NonNull
+    @NotNull
     public String getSurname() {
         return surname;
     }
 
-    public void setSurname(@NonNull String surname) {
+    public void setSurname(@NotNull String surname) {
         this.surname = Objects.requireNonNull(surname);
     }
 

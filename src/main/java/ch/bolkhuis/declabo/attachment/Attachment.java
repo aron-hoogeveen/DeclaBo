@@ -1,7 +1,7 @@
 package ch.bolkhuis.declabo.attachment;
 
 import ch.bolkhuis.declabo.submission.Submission;
-import org.springframework.lang.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,20 +19,20 @@ public class Attachment {
     @GeneratedValue
     protected Long id;
 
-    @NonNull
+    @NotNull
     @Column(nullable = false)
     protected LocalDate uploadedOn;
 
     /**
      * Path to the file on the local filesystem.
      */
-    @NonNull
+    @NotNull
     @Column(nullable = false)
     protected String path;
 
     protected String notes;
 
-    @NonNull
+    @NotNull
     @ManyToOne
     @JoinColumn(nullable = false, name = "submission_id")
     protected Submission submission;
@@ -42,8 +42,8 @@ public class Attachment {
 
     protected Attachment() {}
 
-    public Attachment(@NonNull LocalDate uploadedOn, @NonNull String path, String notes,
-                      @NonNull Submission submission) {
+    public Attachment(@NotNull LocalDate uploadedOn, @NotNull String path, String notes,
+                      @NotNull Submission submission) {
         this.uploadedOn = Objects.requireNonNull(uploadedOn);
         this.path = Objects.requireNonNull(path);
         this.notes = notes;
@@ -58,21 +58,21 @@ public class Attachment {
         this.id = id;
     }
 
-    @NonNull
+    @NotNull
     public LocalDate getUploadedOn() {
         return uploadedOn;
     }
 
-    public void setUploadedOn(@NonNull LocalDate uploadedOn) {
+    public void setUploadedOn(@NotNull LocalDate uploadedOn) {
         this.uploadedOn = uploadedOn;
     }
 
-    @NonNull
+    @NotNull
     public String getPath() {
         return path;
     }
 
-    public void setPath(@NonNull String path) {
+    public void setPath(@NotNull String path) {
         this.path = path;
     }
 
@@ -84,12 +84,12 @@ public class Attachment {
         this.notes = notes;
     }
 
-    @NonNull
+    @NotNull
     public Submission getSubmission() {
         return submission;
     }
 
-    public void setSubmission(@NonNull Submission submission) {
+    public void setSubmission(@NotNull Submission submission) {
         this.submission = submission;
     }
 

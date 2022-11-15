@@ -2,7 +2,6 @@ package ch.bolkhuis.declabo.transaction;
 
 import ch.bolkhuis.declabo.fund.Fund;
 
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDate;

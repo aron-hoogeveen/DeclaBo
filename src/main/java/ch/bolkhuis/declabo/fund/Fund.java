@@ -1,6 +1,6 @@
 package ch.bolkhuis.declabo.fund;
 
-import org.springframework.lang.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +21,7 @@ public abstract class Fund {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @NonNull
+    @NotNull
     @Column(nullable = false, unique = true)
     protected String name;
 
@@ -42,12 +42,12 @@ public abstract class Fund {
         this.id = id;
     }
 
-    @NonNull
+    @NotNull
     public String getName() {
         return name;
     }
 
-    public void setName(@NonNull String name) {
+    public void setName(@NotNull String name) {
         this.name = Objects.requireNonNull(name);
     }
 

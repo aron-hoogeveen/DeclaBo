@@ -1,7 +1,7 @@
 package ch.bolkhuis.declabo.fund;
 
 import ch.bolkhuis.declabo.event.Event;
-import org.springframework.lang.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -11,7 +11,7 @@ import java.util.Objects;
 @Entity
 public abstract class EventFund extends Fund {
 
-    @NonNull
+    @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false, name = "event_id")
     protected Event event;
@@ -23,12 +23,12 @@ public abstract class EventFund extends Fund {
         this.event = Objects.requireNonNull(event);
     }
 
-    @NonNull
+    @NotNull
     public Event getEvent() {
         return event;
     }
 
-    public void setEvent(@NonNull Event event) {
+    public void setEvent(@NotNull Event event) {
         this.event = Objects.requireNonNull(event);
     }
 

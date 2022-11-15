@@ -1,7 +1,7 @@
 package ch.bolkhuis.declabo.user;
 
 import ch.bolkhuis.declabo.fund.CreditFund;
-import org.springframework.lang.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,7 +14,7 @@ import java.util.Objects;
 @Entity
 public class FundUser extends User {
 
-    @NonNull
+    @NotNull
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "fund_id")
     protected CreditFund fund;
@@ -25,17 +25,17 @@ public class FundUser extends User {
     /** Default constructor. Should not be used. Is here only for Spring */
     protected FundUser() {}
 
-    public FundUser(String email, String name, String surname, int room, @NonNull CreditFund fund) {
+    public FundUser(String email, String name, String surname, int room, @NotNull CreditFund fund) {
         super(email, name, surname, room);
         this.fund = Objects.requireNonNull(fund);
     }
 
-    @NonNull
+    @NotNull
     public CreditFund getFund() {
         return fund;
     }
 
-    public void setFund(@NonNull CreditFund fund) {
+    public void setFund(@NotNull CreditFund fund) {
         this.fund = Objects.requireNonNull(fund);
     }
 

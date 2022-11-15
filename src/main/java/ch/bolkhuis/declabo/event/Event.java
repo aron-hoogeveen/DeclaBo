@@ -2,7 +2,7 @@ package ch.bolkhuis.declabo.event;
 
 import ch.bolkhuis.declabo.fund.EventFund;
 import ch.bolkhuis.declabo.user.FundUser;
-import org.springframework.lang.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,21 +24,21 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @NonNull
+    @NotNull
     @Column(nullable = false, unique = true)
     protected String name;
 
-    @NonNull
+    @NotNull
     @Column(nullable = false)
     protected LocalDate date;
 
     protected String description;
 
-    @NonNull
+    @NotNull
     @ManyToMany(fetch = FetchType.LAZY)
     protected Set<FundUser> attendants;
 
-    @NonNull
+    @NotNull
     @OneToMany(fetch = FetchType.LAZY)
     // we can use OneToMany here, since there will probably never be an event with a
     // shitload of EventFunds
@@ -53,7 +53,7 @@ public class Event {
      * @param date the (starting) date
      * @param description a descriptive message
      */
-    public Event(@NonNull String name, @NonNull LocalDate date, @NonNull String description) {
+    public Event(@NotNull String name, @NotNull LocalDate date, @NotNull String description) {
         this.name = Objects.requireNonNull(name);
         this.date = Objects.requireNonNull(date);
         this.description = Objects.requireNonNull(description);
@@ -70,8 +70,8 @@ public class Event {
      * @param attendants a set of all attendants
      * @param funds a set of all event funds belonging to this event
      */
-    public Event(@NonNull String name, @NonNull LocalDate date, @NonNull String description,
-                 @NonNull Set<FundUser> attendants, Set<EventFund> funds) {
+    public Event(@NotNull String name, @NotNull LocalDate date, @NotNull String description,
+                 @NotNull Set<FundUser> attendants, Set<EventFund> funds) {
         // FIXME attendants and funds should be modifiable
         this.name = Objects.requireNonNull(name);
         this.date = Objects.requireNonNull(date);
@@ -88,21 +88,21 @@ public class Event {
         this.id = id;
     }
 
-    @NonNull
+    @NotNull
     public String getName() {
         return name;
     }
 
-    public void setName(@NonNull String name) {
+    public void setName(@NotNull String name) {
         this.name = Objects.requireNonNull(name);
     }
 
-    @NonNull
+    @NotNull
     public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(@NonNull LocalDate date) {
+    public void setDate(@NotNull LocalDate date) {
         this.date = Objects.requireNonNull(date);
     }
 
@@ -114,16 +114,16 @@ public class Event {
         this.description = Objects.requireNonNull(description);
     }
 
-    @NonNull
+    @NotNull
     public Set<FundUser> getAttendants() {
         return attendants;
     }
 
-    public void setAttendants(@NonNull Set<FundUser> attendants) {
+    public void setAttendants(@NotNull Set<FundUser> attendants) {
         this.attendants = Objects.requireNonNull(attendants);
     }
 
-    public void addAttendant(@NonNull FundUser attendant) {
+    public void addAttendant(@NotNull FundUser attendant) {
         this.attendants.add(Objects.requireNonNull(attendant));
     }
 
@@ -134,21 +134,21 @@ public class Event {
      * @return {@code true} if the attendant was in the set and is now removed, {@code false}
      *         otherwise
      */
-    public boolean removeAttendant(@NonNull FundUser attendant) {
+    public boolean removeAttendant(@NotNull FundUser attendant) {
         return attendants.remove(attendant);
     }
 
-    public void addAttendants(@NonNull Set<FundUser> attendants) {
+    public void addAttendants(@NotNull Set<FundUser> attendants) {
         // FIXME check that there are no null-valued attendants
         this.attendants.addAll(attendants);
     }
 
-    @NonNull
+    @NotNull
     public Set<EventFund> getFunds() {
         return funds;
     }
 
-    public void setFunds(@NonNull Set<EventFund> funds) {
+    public void setFunds(@NotNull Set<EventFund> funds) {
         this.funds = Objects.requireNonNull(funds);
     }
 
