@@ -1,11 +1,14 @@
 package ch.bolkhuis.declabo.fund;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("PMD")
 @DataJpaTest(showSql = false)
@@ -44,6 +47,13 @@ public class FundRepositoryTest {
 
         Iterable<Fund> funds = repository.findAll();
         assertThat(funds).hasSize(2).contains(f1, f2);
+    }
+
+    @Test
+    public void should_reject_save_on_duplicate_name() {
+        String name = "fundname";
+        Fund f1 = repository.saveAndFlush(new DebitFund(name, 0L));
+        assertThrows(DataIntegrityViolationException.class, () -> repository.saveAndFlush(new CreditFund(name, 2L)));
     }
 
 }

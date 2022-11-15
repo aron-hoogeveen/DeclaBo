@@ -22,7 +22,7 @@ public abstract class Fund {
     protected Long id;
 
     @NonNull
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     protected String name;
 
     protected long balance;
