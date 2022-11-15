@@ -112,7 +112,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "@" + getIdString() + "{name:" + name + "surname:" + surname + "}";
+        return "@" + getIdString() + "{name:" + name + ", surname:" + surname + "}";
     }
 
     protected String getIdString() {
