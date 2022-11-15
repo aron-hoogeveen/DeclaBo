@@ -1,5 +1,6 @@
 package ch.bolkhuis.declabo.attachment;
 
+import ch.bolkhuis.declabo.submission.Submission;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -13,9 +14,10 @@ public class AttachmentTest {
         LocalDate date = LocalDate.now();
         String path = "/home/declabo/uploads/randomstring/identifier.jpg";
         String notes = "Only the circled entries.";
-        Attachment attachment = new Attachment(date, path, notes);
+        Submission submission = Submission.getTestSubmission();
+        Attachment attachment = new Attachment(date, path, notes, submission);
 
-        assertThat(attachment).hasFieldOrPropertyWithValue("date", date);
+        assertThat(attachment).hasFieldOrPropertyWithValue("uploadedOn", date);
         assertThat(attachment).hasFieldOrPropertyWithValue("path", path);
         assertThat(attachment).hasFieldOrPropertyWithValue("notes", notes);
     }
