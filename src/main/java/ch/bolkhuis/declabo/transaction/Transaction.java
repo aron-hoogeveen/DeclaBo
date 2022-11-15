@@ -1,10 +1,14 @@
 package ch.bolkhuis.declabo.transaction;
 
+import ch.bolkhuis.declabo.event.Event;
 import ch.bolkhuis.declabo.fund.Fund;
+import ch.bolkhuis.declabo.submission.Submission;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -39,11 +43,20 @@ public class Transaction {
     @Column(nullable = false)
     protected String description;
 
+    @Nullable
+    @ManyToOne(fetch = FetchType.EAGER)
+    protected Submission submission;
+
+    @Nullable
+    @ManyToOne(fetch = FetchType.EAGER)
+    protected Event event;
+
     protected boolean settled;
 
     protected Transaction() {}
 
-    public Transaction(Fund debtor, Fund creditor, long amount, LocalDate date, String description, boolean settled) {
+    public Transaction(Fund debtor, Fund creditor, long amount, LocalDate date, String description,
+                       @Nullable Submission submission, @Nullable Event event, boolean settled) {
         this.debtor = Objects.requireNonNull(debtor);
         this.creditor = Objects.requireNonNull(creditor);
 
@@ -52,6 +65,8 @@ public class Transaction {
         this.amount = amount;
         this.date = Objects.requireNonNull(date);
         this.description = Objects.requireNonNull(description);
+        this.submission = submission;
+        this.event = event;
         this.settled = settled;
     }
 
@@ -112,6 +127,24 @@ public class Transaction {
         this.description = Objects.requireNonNull(description);
     }
 
+    public @Nullable Submission getSubmission() {
+        return submission;
+    }
+
+    public void setSubmission(@Nullable Submission submission) {
+        if (settled) throw new IllegalStateException("Cannot change fields of a settled Transaction");
+        this.submission = submission;
+    }
+
+    public @Nullable Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(@Nullable Event event) {
+        if (settled) throw new IllegalStateException("Cannot change fields of a settled Transaction");
+        this.event = event;
+    }
+
     public boolean isSettled() {
         return settled;
     }
@@ -135,7 +168,7 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return "@Transaction{debtor:" + debtor + ", creditor:" + creditor + ", date:" + date +
+        return "@Transaction{date:" + date +
                 ", description:" + description + ", isSettled:" + settled + "}";
     }
 
