@@ -39,9 +39,11 @@ public class Transaction {
     @Column(nullable = false)
     protected String description;
 
+    protected boolean settled;
+
     protected Transaction() {}
 
-    public Transaction(Fund debtor, Fund creditor, long amount, LocalDate date, String description) {
+    public Transaction(Fund debtor, Fund creditor, long amount, LocalDate date, String description, boolean settled) {
         this.debtor = Objects.requireNonNull(debtor);
         this.creditor = Objects.requireNonNull(creditor);
 
@@ -50,6 +52,7 @@ public class Transaction {
         this.amount = amount;
         this.date = Objects.requireNonNull(date);
         this.description = Objects.requireNonNull(description);
+        this.settled = settled;
     }
 
     public Long getId() {
@@ -65,6 +68,8 @@ public class Transaction {
     }
 
     public void setDebtor(@NotNull Fund debtor) {
+        if (settled) throw new IllegalStateException("Cannot change fields of a settled Transaction");
+
         this.debtor = Objects.requireNonNull(debtor);
     }
 
@@ -73,6 +78,8 @@ public class Transaction {
     }
 
     public void setCreditor(@NotNull Fund creditor) {
+        if (settled) throw new IllegalStateException("Cannot change fields of a settled Transaction");
+
         this.creditor = Objects.requireNonNull(creditor);
     }
 
@@ -81,6 +88,7 @@ public class Transaction {
     }
 
     public void setAmount(long amount) {
+        if (settled) throw new IllegalStateException("Cannot change fields of a settled Transaction");
         if (amount <= 0L) throw new IllegalArgumentException("Amount must not be zero or negative");
 
         this.amount = amount;
@@ -91,6 +99,7 @@ public class Transaction {
     }
 
     public void setDate(@NotNull LocalDate date) {
+        if (settled) throw new IllegalStateException("Cannot change fields of a settled Transaction");
         this.date = Objects.requireNonNull(date);
     }
 
@@ -99,7 +108,16 @@ public class Transaction {
     }
 
     public void setDescription(@NotNull String description) {
+        if (settled) throw new IllegalStateException("Cannot change fields of a settled Transaction");
         this.description = Objects.requireNonNull(description);
+    }
+
+    public boolean isSettled() {
+        return settled;
+    }
+
+    public void setSettled(boolean settled) {
+        this.settled = settled;
     }
 
     @Override
@@ -118,7 +136,7 @@ public class Transaction {
     @Override
     public String toString() {
         return "@Transaction{debtor:" + debtor + ", creditor:" + creditor + ", date:" + date +
-                ", description:" + description + "}";
+                ", description:" + description + ", isSettled:" + settled + "}";
     }
 
 }
