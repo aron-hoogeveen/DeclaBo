@@ -1,6 +1,8 @@
 package ch.bolkhuis.declabo.attachment;
 
+import ch.bolkhuis.declabo.event.Event;
 import ch.bolkhuis.declabo.submission.Submission;
+import ch.bolkhuis.declabo.user.FundUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -32,8 +34,12 @@ public class AttachmentRepositoryTest {
         LocalDate date = LocalDate.now();
         String path = "/home/path/to/file.jpg";
         String notes = "some notes";
+
         Submission submission = Submission.getTestSubmission();
+        submission.setPayedBy(entityManager.persist(submission.getPayedBy()));
+        submission.setEvent(entityManager.persist(submission.getEvent()));
         submission = entityManager.persist(submission);
+
         Attachment attachment = repository.saveAndFlush(new Attachment(date, path, notes, submission));
 
         assertThat(attachment).hasFieldOrPropertyWithValue("uploadedOn", date);
@@ -45,8 +51,12 @@ public class AttachmentRepositoryTest {
     public void should_find_all_attachments() {
         LocalDate date = LocalDate.now();
         String notes = "some notes";
+
         Submission submission = Submission.getTestSubmission();
+        submission.setPayedBy(entityManager.persist(submission.getPayedBy()));
+        submission.setEvent(entityManager.persist(submission.getEvent()));
         submission = entityManager.persist(submission);
+
         Attachment a1 = new Attachment(date, "path/a1.pdf", notes, submission);
         Attachment a2 = new Attachment(date, "path/a2.jpg", notes, submission);
 

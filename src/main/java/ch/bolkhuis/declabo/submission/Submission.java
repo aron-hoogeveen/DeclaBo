@@ -5,7 +5,6 @@ import ch.bolkhuis.declabo.user.FundUser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,11 +29,11 @@ public class Submission {
     @Column(nullable = false)
     protected LocalDate date;
 
-    @ManyToOne(cascade = CascadeType.ALL) // FIXME this is only for testing purposes
+    @ManyToOne
     protected FundUser payedBy;
 
     @NotNull
-    @ManyToOne(cascade = CascadeType.ALL) // FIXME this is only for testing purposes
+    @ManyToOne
     @JoinColumn(nullable = false)
     protected Event event;
 
@@ -72,19 +71,19 @@ public class Submission {
         this.id = id;
     }
 
-    public LocalDate getCreatedOn() {
+    public @NotNull LocalDate getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(LocalDate createdOn) {
+    public void setCreatedOn(@NotNull LocalDate createdOn) {
         this.createdOn = createdOn;
     }
 
-    public LocalDate getDate() {
+    public @NotNull LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(@NotNull LocalDate date) {
         this.date = date;
     }
 
@@ -96,27 +95,27 @@ public class Submission {
         this.payedBy = payedBy;
     }
 
-    public Event getEvent() {
+    public @NotNull Event getEvent() {
         return event;
     }
 
-    public void setEvent(Event event) {
+    public void setEvent(@NotNull Event event) {
         this.event = event;
     }
 
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(@NotNull String name) {
         this.name = name;
     }
 
-    public String getRemarks() {
+    public @Nullable String getRemarks() {
         return remarks;
     }
 
-    public void setRemarks(String remarks) {
+    public void setRemarks(@Nullable String remarks) {
         this.remarks = remarks;
     }
 
