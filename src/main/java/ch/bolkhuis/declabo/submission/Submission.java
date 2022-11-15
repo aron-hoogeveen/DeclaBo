@@ -44,6 +44,9 @@ public class Submission {
     @Nullable
     protected String remarks;
 
+    /**
+     * Boolean that signals that the CFO has processed this submission and converted it into transactions.
+     */
     protected boolean processed;
 
     protected boolean settled;
@@ -131,14 +134,13 @@ public class Submission {
     }
 
     /**
-     * Set the state of this {@code Submission} to 'processed'.
+     * Signals if the CFO has already processed this Submission. I.e. he/she created all the
+     * transactions for this submission.
      *
-     * The 'processed' state can only be changed if this Submission is not yet settled.
-     *
-     * @param processed the new state
+     * @param processed the new value for processed
      */
     public void setProcessed(boolean processed) {
-        if (settled) throw new IllegalStateException("Cannot change the 'processed' state of a settled Submission");
+        if (!isChangeable()) throw new IllegalStateException();
         this.processed = processed;
     }
 
@@ -154,7 +156,7 @@ public class Submission {
      * @param settled the new state
      */
     public void setSettled(boolean settled) {
-        if (settled && !processed) throw new IllegalStateException("Cannot set a non-processed Submission to 'processed'");
+        if (settled && !processed) throw new IllegalStateException("Cannot set a non-processed Submission to 'settled'");
         this.settled = settled;
     }
 
