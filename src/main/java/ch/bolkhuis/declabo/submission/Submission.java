@@ -68,6 +68,7 @@ public class Submission {
     }
 
     public void setId(Long id) {
+        if (!isChangeable()) throw new IllegalStateException();
         this.id = id;
     }
 
@@ -76,6 +77,7 @@ public class Submission {
     }
 
     public void setCreatedOn(@NotNull LocalDate createdOn) {
+        if (!isChangeable()) throw new IllegalStateException();
         this.createdOn = createdOn;
     }
 
@@ -84,6 +86,7 @@ public class Submission {
     }
 
     public void setDate(@NotNull LocalDate date) {
+        if (!isChangeable()) throw new IllegalStateException();
         this.date = date;
     }
 
@@ -92,6 +95,7 @@ public class Submission {
     }
 
     public void setPayedBy(FundUser payedBy) {
+        if (!isChangeable()) throw new IllegalStateException();
         this.payedBy = payedBy;
     }
 
@@ -100,6 +104,7 @@ public class Submission {
     }
 
     public void setEvent(@NotNull Event event) {
+        if (!isChangeable()) throw new IllegalStateException();
         this.event = event;
     }
 
@@ -108,6 +113,7 @@ public class Submission {
     }
 
     public void setName(@NotNull String name) {
+        if (!isChangeable()) throw new IllegalStateException();
         this.name = name;
     }
 
@@ -116,6 +122,7 @@ public class Submission {
     }
 
     public void setRemarks(@Nullable String remarks) {
+        if (!isChangeable()) throw new IllegalStateException();
         this.remarks = remarks;
     }
 
@@ -123,7 +130,15 @@ public class Submission {
         return processed;
     }
 
+    /**
+     * Set the state of this {@code Submission} to 'processed'.
+     *
+     * The 'processed' state can only be changed if this Submission is not yet settled.
+     *
+     * @param processed the new state
+     */
     public void setProcessed(boolean processed) {
+        if (settled) throw new IllegalStateException("Cannot change the 'processed' state of a settled Submission");
         this.processed = processed;
     }
 
@@ -131,8 +146,25 @@ public class Submission {
         return settled;
     }
 
+    /**
+     * Set the state of this {@code Submission} to 'settled'.
+     *
+     * The submission can only be set to settled if it is also marked as 'processed'.
+     *
+     * @param settled the new state
+     */
     public void setSettled(boolean settled) {
+        if (settled && !processed) throw new IllegalStateException("Cannot set a non-processed Submission to 'processed'");
         this.settled = settled;
+    }
+
+    /**
+     * Fields can only be changed when {@code settled} is {@code false}.
+     *
+     * @return whether this object is allowed to be modified.
+     */
+    private boolean isChangeable() {
+        return !settled;
     }
 
     @Override
