@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("PMD")
 public class AttachmentTest {
 
     @Test

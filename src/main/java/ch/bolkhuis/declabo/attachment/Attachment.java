@@ -42,6 +42,9 @@ public class Attachment {
 
     protected Attachment() {}
 
+    /**
+     * Constructs a new Attachment.
+     */
     public Attachment(@NotNull LocalDate uploadedOn, @NotNull String path, String notes,
                       @NotNull Submission submission) {
         this.uploadedOn = Objects.requireNonNull(uploadedOn);

@@ -19,6 +19,8 @@ import java.util.Objects;
 @Entity
 public class Transaction {
 
+    private static final String settledErrorString = "Cannot change fields of a settled Transaction";
+
     @Id
     @GeneratedValue
     protected Long id;
@@ -55,6 +57,9 @@ public class Transaction {
 
     protected Transaction() {}
 
+    /**
+     * Create a new Transaction.
+     */
     public Transaction(Fund debtor, Fund creditor, long amount, LocalDate date, String description,
                        @Nullable Submission submission, @Nullable Event event, boolean settled) {
         this.debtor = Objects.requireNonNull(debtor);
@@ -82,8 +87,14 @@ public class Transaction {
         return debtor;
     }
 
+    /**
+     * Set a new Debtor.
+     *
+     * @param debtor the new debtor
+     * @throws IllegalStateException if this Transaction is already settled
+     */
     public void setDebtor(@NotNull Fund debtor) {
-        if (settled) throw new IllegalStateException("Cannot change fields of a settled Transaction");
+        if (settled) throw new IllegalStateException(settledErrorString);
 
         this.debtor = Objects.requireNonNull(debtor);
     }
@@ -92,8 +103,14 @@ public class Transaction {
         return creditor;
     }
 
+    /**
+     * Set a new creditor.
+     *
+     * @param creditor the new creditor
+     * @throws IllegalStateException if this Transaction is already settled
+     */
     public void setCreditor(@NotNull Fund creditor) {
-        if (settled) throw new IllegalStateException("Cannot change fields of a settled Transaction");
+        if (settled) throw new IllegalStateException(settledErrorString);
 
         this.creditor = Objects.requireNonNull(creditor);
     }
@@ -102,8 +119,14 @@ public class Transaction {
         return amount;
     }
 
+    /**
+     * Set a new amount.
+     *
+     * @param amount the new amount
+     * @throws IllegalStateException if this Transaction is already settled
+     */
     public void setAmount(long amount) {
-        if (settled) throw new IllegalStateException("Cannot change fields of a settled Transaction");
+        if (settled) throw new IllegalStateException(settledErrorString);
         if (amount <= 0L) throw new IllegalArgumentException("Amount must not be zero or negative");
 
         this.amount = amount;
@@ -113,8 +136,14 @@ public class Transaction {
         return date;
     }
 
+    /**
+     * Set a new date.
+     *
+     * @param date the new date
+     * @throws IllegalStateException if this Transaction is already settled
+     */
     public void setDate(@NotNull LocalDate date) {
-        if (settled) throw new IllegalStateException("Cannot change fields of a settled Transaction");
+        if (settled) throw new IllegalStateException(settledErrorString);
         this.date = Objects.requireNonNull(date);
     }
 
@@ -122,8 +151,14 @@ public class Transaction {
         return description;
     }
 
+    /**
+     * Set a new description.
+     *
+     * @param description the new description
+     * @throws IllegalStateException if this Transaction is already settled
+     */
     public void setDescription(@NotNull String description) {
-        if (settled) throw new IllegalStateException("Cannot change fields of a settled Transaction");
+        if (settled) throw new IllegalStateException(settledErrorString);
         this.description = Objects.requireNonNull(description);
     }
 
@@ -131,8 +166,14 @@ public class Transaction {
         return submission;
     }
 
+    /**
+     * Set a new submission.
+     *
+     * @param submission the new submission
+     * @throws IllegalStateException if this Transaction is already settled
+     */
     public void setSubmission(@Nullable Submission submission) {
-        if (settled) throw new IllegalStateException("Cannot change fields of a settled Transaction");
+        if (settled) throw new IllegalStateException(settledErrorString);
         this.submission = submission;
     }
 
@@ -140,8 +181,14 @@ public class Transaction {
         return event;
     }
 
+    /**
+     * Set a new event.
+     *
+     * @param event the new event
+     * @throws IllegalStateException if this Transaction is already settled
+     */
     public void setEvent(@Nullable Event event) {
-        if (settled) throw new IllegalStateException("Cannot change fields of a settled Transaction");
+        if (settled) throw new IllegalStateException(settledErrorString);
         this.event = event;
     }
 
@@ -168,8 +215,8 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return "@Transaction{date:" + date +
-                ", description:" + description + ", isSettled:" + settled + "}";
+        return "@Transaction{date:" + date
+                + ", description:" + description + ", isSettled:" + settled + "}";
     }
 
 }

@@ -53,6 +53,9 @@ public class Submission {
 
     protected Submission() {}
 
+    /**
+     * Constructs a new Submission.
+     */
     public Submission(@NotNull LocalDate createdOn, @NotNull LocalDate date, FundUser payedBy,
                       @NotNull Event event, @NotNull String name,
                       @Nullable String remarks, boolean processed, boolean settled) {
@@ -182,6 +185,9 @@ public class Submission {
         return Objects.hash(createdOn, date, payedBy, name);
     }
 
+    /**
+     * Utility method for quick testing.
+     */
     public static Submission getTestSubmission() {
         return new Submission(LocalDate.now(), LocalDate.now(), FundUser.getTestUser(),
                 Event.getTestEvent(), "Test Submission", "No remarks",

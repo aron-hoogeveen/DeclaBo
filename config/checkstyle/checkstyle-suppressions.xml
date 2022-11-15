@@ -10,4 +10,5 @@
     <suppress checks="JavadocParagraph" />
     <suppress checks="LineLengthCheck" />
     <suppress checks="CommentsIndentationCheck" />
+    <suppress checks="VariableDeclarationUsageDistanceCheck" />
 </suppressions>

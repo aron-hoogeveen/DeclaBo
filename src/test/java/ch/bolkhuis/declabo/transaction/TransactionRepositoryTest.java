@@ -14,6 +14,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("PMD")
 @DataJpaTest
 public class TransactionRepositoryTest {
 
