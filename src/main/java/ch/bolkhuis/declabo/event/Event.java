@@ -40,23 +40,11 @@ public class Event {
 
     @NonNull
     @OneToMany(fetch = FetchType.LAZY)
-               // we can use OneToMany here, since there will probably never be an event with a
-               // shitload of EventFunds
+    // we can use OneToMany here, since there will probably never be an event with a
+    // shitload of EventFunds
     protected Set<EventFund> funds;
 
     protected Event() {}
-
-    /**
-     * Creates an event with an initial {@code id}.
-     *
-     * @param id the id to set
-     * @deprecated This method was only intended for use by the test classes of other classes which
-     *             need this class.
-     */
-    @Deprecated
-    public Event(long id) {
-        this.id = id;
-    }
 
     /**
      * Create a new Event with empty attendants and funds.
@@ -82,8 +70,8 @@ public class Event {
      * @param attendants a set of all attendants
      * @param funds a set of all event funds belonging to this event
      */
-    public Event(@NonNull String name, @NonNull LocalDate date, @NonNull String description, @NonNull Set<FundUser> attendants,
-                 Set<EventFund> funds) {
+    public Event(@NonNull String name, @NonNull LocalDate date, @NonNull String description,
+                 @NonNull Set<FundUser> attendants, Set<EventFund> funds) {
         // FIXME attendants and funds should be modifiable
         this.name = Objects.requireNonNull(name);
         this.date = Objects.requireNonNull(date);
@@ -182,6 +170,10 @@ public class Event {
     @Override
     public String toString() {
         return "@Event{name:" + name + ", date:" + date + "}";
+    }
+
+    public static Event getTestEvent() {
+        return new Event("Test Event", LocalDate.now(), "This is a test event.");
     }
 
 }

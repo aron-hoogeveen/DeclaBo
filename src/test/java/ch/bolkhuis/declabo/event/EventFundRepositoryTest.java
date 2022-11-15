@@ -33,7 +33,7 @@ public class EventFundRepositoryTest {
     public void should_store_an_eventfund() {
         String name = "Event Fund";
         long balance = 36L;
-        Event event = entityManager.persist(new Event(1L));
+        Event event = entityManager.persist(Event.getTestEvent());
         EventFund fund = repository.save(new CreditEventFund(name, balance, event));
 
         assertThat(fund).hasFieldOrPropertyWithValue("name", name);
@@ -43,7 +43,7 @@ public class EventFundRepositoryTest {
 
     @Test
     public void should_find_all_eventfunds() {
-        Event event = entityManager.persist(new Event(2L));
+        Event event = entityManager.persist(Event.getTestEvent());
 
         EventFund f1 = new CreditEventFund("Event Fund 1", 2L, event);
         entityManager.persist(f1);

@@ -41,7 +41,8 @@ public class FundUserRepositoryTest {
         assertThat(user).hasFieldOrPropertyWithValue("name", name);
         assertThat(user).hasFieldOrPropertyWithValue("surname", surname);
         assertThat(user).hasFieldOrPropertyWithValue("room", room);
-        assertThat(user).hasFieldOrPropertyWithValue("fund", fund); // should have been eagerly fetched
+        assertThat(user).hasFieldOrPropertyWithValue("fund", fund); // should have been
+                                                                          // eagerly fetched
     }
 
     @Test

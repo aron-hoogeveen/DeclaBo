@@ -12,7 +12,7 @@ public class CreditEventFundTest {
     public void should_set_all_fields_on_construction() {
         String name = "name";
         long balance = 2L;
-        Event event = new Event(2L);
+        Event event = Event.getTestEvent();
         CreditEventFund fund = new CreditEventFund(name, balance, event);
 
         assertThat(fund).hasFieldOrPropertyWithValue("name", name);
@@ -22,7 +22,7 @@ public class CreditEventFundTest {
 
     @Test
     public void should_increase_balance_when_debited_and_decrease_when_credited() {
-        CreditEventFund fund = new CreditEventFund("name", 0L, new Event(2L));
+        CreditEventFund fund = new CreditEventFund("name", 0L, Event.getTestEvent());
         assertThat(fund.getBalance()).isEqualTo(0L);
 
         fund.debit(2L);

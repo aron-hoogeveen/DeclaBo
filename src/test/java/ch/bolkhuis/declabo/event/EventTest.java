@@ -31,9 +31,11 @@ public class EventTest {
         assertThat(event.getAttendants()).contains(attendant);
     }
 
-    // TODO add test for Event#addAttendants(Set) that disallows null-valued input (both in the list and the list itself)
+    // TODO add test for Event#addAttendants(Set) that disallows null-valued input (both in the list
+    // and the list itself)
 
-    // TODO add test for Event#addAttendant(FundUser) and Event#addAttendants(Set). They must not fail when adding a FundUser which is already present
+    // TODO add test for Event#addAttendant(FundUser) and Event#addAttendants(Set). They must not
+    // fail when adding a FundUser which is already present
 
     @Test
     public void should_return_null_when_removed_attendant_was_not_in_set() {

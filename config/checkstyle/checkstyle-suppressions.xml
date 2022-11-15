@@ -8,4 +8,6 @@
     <suppress checks="CustomImportOrder" />
     <suppress checks="NeedBraces" />
     <suppress checks="JavadocParagraph" />
+    <suppress checks="LineLengthCheck" />
+    <suppress checks="CommentsIndentationCheck" />
 </suppressions>

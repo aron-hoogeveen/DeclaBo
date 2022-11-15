@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -43,7 +44,17 @@ public class EventRepositoryTest {
         assertThat(event).hasFieldOrPropertyWithValue("description", description);
     }
 
-    // FIXME I thought that the attendants would not be available if not fetched, but this test shows otherwise. Investigate at a later moment
+    @Test
+    public void should_reject_save_on_duplicate_name() {
+        String name = "My Event";
+
+        Event e1 = new Event(name, LocalDate.of(2022, 1, 1), "yes");
+        Event e2 = new Event(name, LocalDate.of(1099, 1, 1), "no");
+        assertThrows(DataIntegrityViolationException.class, () -> repository.saveAllAndFlush(List.of(e1, e2)));
+    }
+
+    // FIXME I thought that the attendants would not be available if not fetched, but this test \
+    // shows otherwise. Investigate at a later moment
 //    @Test
 //    public void should_fetch_attendants_if_asked() {
 //        FundUser user1 = entityManager.persist(FundUser.getTestUser());

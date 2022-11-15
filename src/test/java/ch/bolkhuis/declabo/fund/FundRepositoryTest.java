@@ -53,7 +53,8 @@ public class FundRepositoryTest {
     public void should_reject_save_on_duplicate_name() {
         String name = "fundname";
         Fund f1 = repository.saveAndFlush(new DebitFund(name, 0L));
-        assertThrows(DataIntegrityViolationException.class, () -> repository.saveAndFlush(new CreditFund(name, 2L)));
+        assertThrows(DataIntegrityViolationException.class, () ->
+                repository.saveAndFlush(new CreditFund(name, 2L)));
     }
 
 }
