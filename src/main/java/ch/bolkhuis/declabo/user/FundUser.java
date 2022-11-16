@@ -1,76 +1,52 @@
 package ch.bolkhuis.declabo.user;
 
-import ch.bolkhuis.declabo.fund.Fund;
+import ch.bolkhuis.declabo.fund.CreditFund;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import java.util.Objects;
 
-public class FundUser extends SimpleUser {
+@Entity
+public class FundUser extends User {
 
-    private @NotNull Fund fund;
+    @NotNull
+    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "fund_id")
+    protected CreditFund fund;
 
-    /**
-     * Constructs a new SimpleUser.
-     *
-     * @param id       the id, must not be null
-     * @param email    the email address, must not be null
-     * @param name     the name, must not be null
-     * @param surname  the surname, must not be null
-     * @param nickname the nickname
-     * @throws NullPointerException     if {@code id}, {@code email}, {@code name}, or
-     *                                  {@code surname} is null
-     * @throws IllegalArgumentException if {@code name}, {@code surname} is not a valid name, or if
-     *                                  {@code nickname} is non-null and not a valid name
-     */
-    public FundUser(
-            Long id,
-            @NotNull String email,
-            @NotNull String name,
-            @NotNull String surname,
-            @Nullable String nickname,
-            @NotNull Fund fund
-    ) {
-        super(id, email, name, surname, nickname);
+    @Column(name = "fund_id", insertable = false, updatable = false)
+    protected Long fundId; // prevents join operations when selecting on fund_id
 
+    /** Default constructor. Should not be used. Is here only for Spring */
+    protected FundUser() {}
+
+    public FundUser(String email, String name, String surname, int room, @NotNull CreditFund fund) {
+        super(email, name, surname, room);
         this.fund = Objects.requireNonNull(fund);
     }
 
-    /**
-     * Gets the {@code Fund} of this {@code FundUser}.
-     *
-     * @return the fund
-     */
-    public @NotNull Fund getFund() {
-        return this.fund;
+    @NotNull
+    public CreditFund getFund() {
+        return fund;
     }
 
-    private void setFund(@NotNull Fund fund) {
+    public void setFund(@NotNull CreditFund fund) {
         this.fund = Objects.requireNonNull(fund);
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        FundUser fundUser = (FundUser) o;
-
-        return fund.equals(fundUser.fund);
+    protected String getIdString() {
+        return "FundUser";
     }
 
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + fund.hashCode();
-        return result;
+    public static FundUser getTestUser() {
+        CreditFund fund = new CreditFund("Aron Hoogeveen", 420L);
+        return new FundUser("aron@bolkhuis.ch", "Aron", "Hoogeveen", 101, fund);
     }
 
-    @Override
-    public String toString() {
-        return "FundUser{"
-                + "name=" + getName()
-                + '}';
-    }
 }

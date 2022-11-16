@@ -1,55 +1,51 @@
 package ch.bolkhuis.declabo.fund;
 
-import org.jetbrains.annotations.NotNull;
+import javax.persistence.Entity;
 
-public class CreditFund extends AbstractFund {
+@Entity
+public class CreditFund extends Fund {
+
+    protected CreditFund() {}
+
+    public CreditFund(String name, long balance) {
+        super(name, balance);
+    }
 
     /**
-     * Construct a new {@code CreditFund}.
+     * Debit this CreditFund.
      *
-     * @param id      the id
-     * @param name    the name, must be non-null
-     * @param balance the balance
-     * @throws NullPointerException if {@code name} is null
+     * Decrease the balance of this CreditFund by {@code amount}.
+     *
+     * @param amount the amount to subtract
+     * @return the new balance
      */
-    public CreditFund(Long id, @NotNull String name, long balance) {
-        super(id, name, balance);
-    }
-
-    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
     @Override
     public long debit(long amount) {
-        if (amount < 0L) {
-            throw new IllegalArgumentException("Cannot debit a negative amount");
-        }
-        if (Long.MIN_VALUE + amount > this.balance) {
-            throw new ArithmeticException("Debiting '" + amount + "' will result in an underflow");
-        }
-        this.balance -= amount;
-        return this.balance;
+        // FIXME add overflow/underflow protection
+        if (amount < 0L) throw new IllegalArgumentException("Cannot debit negative amount");
+        balance -= amount;
+        return balance;
     }
 
-    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
+    /**
+     * Credit this CreditFund.
+     *
+     * Increase the balance of this CreditFund by {@code amount}.
+     *
+     * @param amount the amount to add
+     * @return the new balance
+     */
     @Override
     public long credit(long amount) {
-        if (amount < 0L) {
-            throw new IllegalArgumentException("Cannot credit a negative amount");
-        }
-        if (Long.MAX_VALUE - amount < this.balance) {
-            throw new ArithmeticException("Crediting '" + amount + "' will result in an overflow");
-        }
-        this.balance += amount;
-        return this.balance;
+        // FIXME add overflow/underflow protection
+        if (amount < 0L) throw new IllegalArgumentException("Cannot credit negative amount");
+        balance += amount;
+        return balance;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (!super.equals(o)) return false;
-        return (o instanceof CreditFund);
+    protected String getIdString() {
+        return "DebitFund";
     }
 
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
 }

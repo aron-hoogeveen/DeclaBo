@@ -1,33 +1,35 @@
 package ch.bolkhuis.declabo.fund;
 
 import ch.bolkhuis.declabo.event.Event;
-import ch.bolkhuis.declabo.event.SimpleEvent;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
-import java.util.Set;
+import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("PMD")
 public class CreditEventFundTest {
 
-    private static final transient Long ID = 0L;
-    private static final transient String NAME = "Gerrit";
-    private static final transient Long BALANCE = 23487L;
-    private static final transient Event EVENT = new SimpleEvent(0L,
-            LocalDate.of(1999, 2, 3), "event",
-            "description", Set.of(), Set.of());
-
     @Test
-    public void test_constructor() {
-        new CreditEventFund(ID, NAME, BALANCE, EVENT);
-        Assertions.assertThrows(NullPointerException.class, () ->
-                new CreditEventFund(ID, NAME, BALANCE, null)
-        );
+    public void should_set_all_fields_on_construction() {
+        String name = "name";
+        long balance = 2L;
+        Event event = Event.getTestEvent();
+        CreditEventFund fund = new CreditEventFund(name, balance, event);
+
+        assertThat(fund).hasFieldOrPropertyWithValue("name", name);
+        assertThat(fund).hasFieldOrPropertyWithValue("balance", balance);
+        assertThat(fund).hasFieldOrPropertyWithValue("event", event);
     }
 
     @Test
-    public void test_getters() {
-        CreditEventFund creditEventFund = new CreditEventFund(ID, NAME, BALANCE, EVENT);
-        Assertions.assertEquals(EVENT, creditEventFund.getEvent());
+    public void should_increase_balance_when_debited_and_decrease_when_credited() {
+        CreditEventFund fund = new CreditEventFund("name", 0L, Event.getTestEvent());
+        assertThat(fund.getBalance()).isEqualTo(0L);
+
+        fund.debit(2L);
+        assertThat(fund.getBalance()).isEqualTo(-2L);
+
+        fund.credit(2L);
+        assertThat(fund.getBalance()).isEqualTo(0L);
     }
+
 }

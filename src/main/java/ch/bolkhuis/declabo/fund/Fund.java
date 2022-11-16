@@ -1,46 +1,96 @@
 package ch.bolkhuis.declabo.fund;
 
-/**
- * A monetary fund.
- */
-public interface Fund {
+import org.jetbrains.annotations.NotNull;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import java.util.Objects;
+
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Fund {
+
+    private static final String idString = "Fund";
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected Long id;
+
+    @NotNull
+    @Column(nullable = false, unique = true)
+    protected String name;
+
+    protected long balance;
+
+    protected Fund() {}
+
+    public Fund(String name, long balance) {
+        this.name = Objects.requireNonNull(name);
+        this.balance = balance;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @NotNull
+    public String getName() {
+        return name;
+    }
+
+    public void setName(@NotNull String name) {
+        this.name = Objects.requireNonNull(name);
+    }
+
+    public long getBalance() {
+        return balance;
+    }
+
+    public void setBalance(long balance) {
+        this.balance = balance;
+    }
+
+    public abstract long debit(long amount);
+
+    public abstract long credit(long amount);
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Fund fund = (Fund) o;
+        return name.equals(fund.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
+
+    @Override
+    public String toString() {
+        return "@" + getIdString() + "{name:" + name + "}";
+    }
 
     /**
-     * Gets the id of this {@code Fund}.
+     * Returns the name of this class.
      *
-     * @return the id
+     * It is used in the toString() method. This method eliminates code duplication by using the
+     * same toString() signature for each child class.
+     *
+     * @return the name of this class
      */
-    Long getId();
+    protected String getIdString() {
+        return "Fund";
+    }
 
-    /**
-     * Gets the balance of this {@code Fund}. The balance is returned in euro cents.
-     *
-     * @return the balance in eurocents
-     */
-    long getBalance();
-
-    /**
-     * Gets the name of this {@code Fund}.
-     *
-     * @return the name
-     */
-    String getName();
-
-    /**
-     * Debits the balance of this {@code Fund}.
-     *
-     * @param amount the amount to debit
-     * @return the new balance
-     * @throws IllegalArgumentException if amount is negative (optional)
-     */
-    long debit(long amount);
-
-    /**
-     * Credits the balance of this {@code Fund}.
-     *
-     * @param amount the amount to credit
-     * @return the new balance
-     * @throws IllegalArgumentException if amount is negative (optional)
-     */
-    long credit(long amount);
 }
