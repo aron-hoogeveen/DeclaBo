@@ -30,7 +30,7 @@ public class Submission {
     protected LocalDate date;
 
     @ManyToOne
-    protected FundUser payedBy;
+    protected FundUser paidBy;
 
     @NotNull
     @ManyToOne
@@ -44,29 +44,58 @@ public class Submission {
     @Nullable
     protected String remarks;
 
-    /**
-     * Boolean that signals that the CFO has processed this submission and converted it into transactions.
-     */
-    protected boolean processed;
+    @NotNull
+    protected Status status;
 
-    protected boolean settled;
+    // state changes
+    protected static boolean[][] stateChanges = new boolean[Status.values().length][Status.values().length];
+
+    static {
+        // By default, all state changes are not allowed. Set which ones are allowed here
+        stateChanges[Status.PENDING.getValue()][Status.PENDING.getValue()] = true;
+        stateChanges[Status.PENDING.getValue()][Status.IN_PROGRESS.getValue()] = true;
+        stateChanges[Status.PENDING.getValue()][Status.REJECTED.getValue()] = true;
+
+        stateChanges[Status.BEING_CREATED.getValue()][Status.BEING_CREATED.getValue()] = true;
+        stateChanges[Status.BEING_CREATED.getValue()][Status.IN_PROGRESS.getValue()] = true;
+
+        stateChanges[Status.IN_PROGRESS.getValue()][Status.IN_PROGRESS.getValue()] = true;
+        stateChanges[Status.IN_PROGRESS.getValue()][Status.REJECTED.getValue()] = true;
+        stateChanges[Status.IN_PROGRESS.getValue()][Status.PROCESSED.getValue()] = true;
+
+        stateChanges[Status.REJECTED.getValue()][Status.REJECTED.getValue()] = true;
+        stateChanges[Status.REJECTED.getValue()][Status.IN_PROGRESS.getValue()] = true;
+
+        stateChanges[Status.PROCESSED.getValue()][Status.PROCESSED.getValue()] = true;
+        stateChanges[Status.PROCESSED.getValue()][Status.IN_PROGRESS.getValue()] = true;
+        stateChanges[Status.PROCESSED.getValue()][Status.SETTLED.getValue()] = true;
+
+        stateChanges[Status.SETTLED.getValue()][Status.SETTLED.getValue()] = true;
+    }
 
     protected Submission() {}
 
     /**
      * Constructs a new Submission.
+     *
+     * @param createdOn the date on which this submission was created
+     * @param date the date on which the transactions of this submission happened
+     * @param paidBy the person/entity who/that paid for this submission
+     * @param event the event this submission belongs to. May be null
+     * @param name a describing name for this submission
+     * @param remarks any remarks on this submission
+     * @param status the current status of this submission
      */
-    public Submission(@NotNull LocalDate createdOn, @NotNull LocalDate date, FundUser payedBy,
+    public Submission(@NotNull LocalDate createdOn, @NotNull LocalDate date, FundUser paidBy,
                       @NotNull Event event, @NotNull String name,
-                      @Nullable String remarks, boolean processed, boolean settled) {
+                      @Nullable String remarks, @NotNull Status status) {
         this.createdOn = Objects.requireNonNull(createdOn);
         this.date = Objects.requireNonNull(date);
-        this.payedBy = payedBy;
+        this.paidBy = paidBy;
         this.event = Objects.requireNonNull(event);
         this.name = Objects.requireNonNull(name);
         this.remarks = remarks;
-        this.processed = processed;
-        this.settled = settled;
+        this.status = Objects.requireNonNull(status);
     }
 
     public Long getId() {
@@ -74,7 +103,6 @@ public class Submission {
     }
 
     public void setId(Long id) {
-        if (!isChangeable()) throw new IllegalStateException();
         this.id = id;
     }
 
@@ -83,7 +111,7 @@ public class Submission {
     }
 
     public void setCreatedOn(@NotNull LocalDate createdOn) {
-        if (!isChangeable()) throw new IllegalStateException();
+        if (status != Status.BEING_CREATED) throw new IllegalStateException();
         this.createdOn = createdOn;
     }
 
@@ -92,17 +120,17 @@ public class Submission {
     }
 
     public void setDate(@NotNull LocalDate date) {
-        if (!isChangeable()) throw new IllegalStateException();
+        if (!modifiable()) throw new IllegalStateException();
         this.date = date;
     }
 
-    public FundUser getPayedBy() {
-        return payedBy;
+    public FundUser getPaidBy() {
+        return paidBy;
     }
 
-    public void setPayedBy(FundUser payedBy) {
-        if (!isChangeable()) throw new IllegalStateException();
-        this.payedBy = payedBy;
+    public void setPaidBy(FundUser payedBy) {
+        if (!modifiable()) throw new IllegalStateException();
+        this.paidBy = payedBy;
     }
 
     public @NotNull Event getEvent() {
@@ -110,7 +138,7 @@ public class Submission {
     }
 
     public void setEvent(@NotNull Event event) {
-        if (!isChangeable()) throw new IllegalStateException();
+        if (!modifiable()) throw new IllegalStateException();
         this.event = event;
     }
 
@@ -119,7 +147,7 @@ public class Submission {
     }
 
     public void setName(@NotNull String name) {
-        if (!isChangeable()) throw new IllegalStateException();
+        if (!modifiable()) throw new IllegalStateException();
         this.name = name;
     }
 
@@ -128,48 +156,32 @@ public class Submission {
     }
 
     public void setRemarks(@Nullable String remarks) {
-        if (!isChangeable()) throw new IllegalStateException();
+        if (!modifiable()) throw new IllegalStateException();
         this.remarks = remarks;
     }
 
-    public boolean isProcessed() {
-        return processed;
+    public @NotNull Status getStatus() {
+        return status;
     }
 
     /**
-     * Signals if the CFO has already processed this Submission. I.e. he/she created all the
-     * transactions for this submission.
+     * Set the new Status.
      *
-     * @param processed the new value for processed
+     * A status change is only possible if it is an allowed state change.
+     *
+     * @param newStatus the new status
      */
-    public void setProcessed(boolean processed) {
-        if (!isChangeable()) throw new IllegalStateException();
-        this.processed = processed;
-    }
-
-    public boolean isSettled() {
-        return settled;
-    }
-
-    /**
-     * Set the state of this {@code Submission} to 'settled'.
-     *
-     * The submission can only be set to settled if it is also marked as 'processed'.
-     *
-     * @param settled the new state
-     */
-    public void setSettled(boolean settled) {
-        if (settled && !processed) throw new IllegalStateException("Cannot set a non-processed Submission to 'settled'");
-        this.settled = settled;
+    public void setStatus(@NotNull Status newStatus) {
+        if (!stateChanges[status.getValue()][newStatus.getValue()])
+            throw new IllegalStateException("This state change is not allowed: " + status + " to " + newStatus);
+        this.status = Objects.requireNonNull(newStatus);
     }
 
     /**
-     * Fields can only be changed when {@code settled} is {@code false}.
-     *
-     * @return whether this object is allowed to be modified.
+     * Returns whether all modifiable fields are allowed to change in the current state.
      */
-    private boolean isChangeable() {
-        return !settled;
+    private boolean modifiable() {
+        return status == Status.PENDING || status == Status.BEING_CREATED;
     }
 
     @Override
@@ -177,20 +189,22 @@ public class Submission {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Submission that = (Submission) o;
-        return createdOn.equals(that.createdOn) && date.equals(that.date) && Objects.equals(payedBy, that.payedBy) && name.equals(that.name);
+        return createdOn.equals(that.createdOn) && date.equals(that.date) && Objects.equals(paidBy, that.paidBy) && name.equals(that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(createdOn, date, payedBy, name);
+        return Objects.hash(createdOn, date, paidBy, name);
     }
 
     /**
      * Utility method for quick testing.
+     *
+     * Sets the status of the returned Submission to Status.BEING_CREATED to allow field changes.
      */
-    public static Submission getTestSubmission() {
+    public static Submission getTestSubmission_beingCreated() {
         return new Submission(LocalDate.now(), LocalDate.now(), FundUser.getTestUser(),
                 Event.getTestEvent(), "Test Submission", "No remarks",
-                false, false);
+                Status.BEING_CREATED);
     }
 }

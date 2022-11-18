@@ -1,8 +1,6 @@
 package ch.bolkhuis.declabo.attachment;
 
-import ch.bolkhuis.declabo.event.Event;
 import ch.bolkhuis.declabo.submission.Submission;
-import ch.bolkhuis.declabo.user.FundUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -36,8 +34,8 @@ public class AttachmentRepositoryTest {
         String path = "/home/path/to/file.jpg";
         String notes = "some notes";
 
-        Submission submission = Submission.getTestSubmission();
-        submission.setPayedBy(entityManager.persist(submission.getPayedBy()));
+        Submission submission = Submission.getTestSubmission_beingCreated(); // FIXME remove coupling between test classes and object classes
+        submission.setPaidBy(entityManager.persist(submission.getPaidBy()));
         submission.setEvent(entityManager.persist(submission.getEvent()));
         submission = entityManager.persist(submission);
 
@@ -53,8 +51,8 @@ public class AttachmentRepositoryTest {
         LocalDate date = LocalDate.now();
         String notes = "some notes";
 
-        Submission submission = Submission.getTestSubmission();
-        submission.setPayedBy(entityManager.persist(submission.getPayedBy()));
+        Submission submission = Submission.getTestSubmission_beingCreated();
+        submission.setPaidBy(entityManager.persist(submission.getPaidBy()));
         submission.setEvent(entityManager.persist(submission.getEvent()));
         submission = entityManager.persist(submission);
 

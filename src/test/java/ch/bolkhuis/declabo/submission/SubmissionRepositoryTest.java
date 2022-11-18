@@ -32,26 +32,24 @@ public class SubmissionRepositoryTest {
     public void should_store_a_submission() {
         LocalDate createdOn = LocalDate.now();
         LocalDate date = LocalDate.now();
-        FundUser payedBy = FundUser.getTestUser();
+        FundUser paidBy = FundUser.getTestUser();
         Event event = Event.getTestEvent();
         String name = "name of submission";
         String remarks = "any remarks";
-        boolean processed = false;
-        boolean settled = false;
-        Submission submission = new Submission(createdOn, date, payedBy, event, name, remarks, processed, settled);
+        Status status = Status.BEING_CREATED;
+        Submission submission = new Submission(createdOn, date, paidBy, event, name, remarks, status);
 
-        submission.setPayedBy(entityManager.persist(submission.getPayedBy()));
+        submission.setPaidBy(entityManager.persist(submission.getPaidBy()));
         submission.setEvent(entityManager.persist(submission.getEvent()));
         submission = entityManager.persist(submission);
 
         assertThat(submission).hasFieldOrPropertyWithValue("createdOn", createdOn);
         assertThat(submission).hasFieldOrPropertyWithValue("date", date);
-        assertThat(submission).hasFieldOrPropertyWithValue("payedBy", payedBy);
+        assertThat(submission).hasFieldOrPropertyWithValue("paidBy", paidBy);
         assertThat(submission).hasFieldOrPropertyWithValue("event", event);
         assertThat(submission).hasFieldOrPropertyWithValue("name", name);
         assertThat(submission).hasFieldOrPropertyWithValue("remarks", remarks);
-        assertThat(submission).hasFieldOrPropertyWithValue("processed", processed);
-        assertThat(submission).hasFieldOrPropertyWithValue("settled", settled);
+        assertThat(submission).hasFieldOrPropertyWithValue("status", status);
     }
 
 }
