@@ -1,6 +1,7 @@
 package ch.bolkhuis.declabo.event;
 
 import ch.bolkhuis.declabo.user.FundUser;
+import ch.bolkhuis.declabo.user.FundUserTest;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -25,7 +26,7 @@ public class EventTest {
     @Test
     public void should_save_attendant_when_added() {
         Event event = new Event("name", LocalDate.now(), "description");
-        FundUser attendant = FundUser.getTestUser();
+        FundUser attendant = FundUserTest.getTestCreditFundUser();
         event.addAttendant(attendant);
 
         assertThat(event.getAttendants()).contains(attendant);
@@ -40,7 +41,7 @@ public class EventTest {
     @Test
     public void should_return_null_when_removed_attendant_was_not_in_set() {
         Event event = new Event("name", LocalDate.now(), "description");
-        FundUser attendant = FundUser.getTestUser();
+        FundUser attendant = FundUserTest.getTestCreditFundUser();
 
         assertThat(event.removeAttendant(attendant)).isEqualTo(false);
         assertThat(event.getAttendants()).doesNotContain(attendant);
@@ -49,11 +50,15 @@ public class EventTest {
     @Test
     public void should_return_true_if_attendant_removed() {
         Event event = new Event("name", LocalDate.now(), "description");
-        FundUser attendant = FundUser.getTestUser();
+        FundUser attendant = FundUserTest.getTestCreditFundUser();
         event.addAttendant(attendant);
 
         assertThat(event.removeAttendant(attendant)).isEqualTo(true);
         assertThat(event.getAttendants()).doesNotContain(attendant);
+    }
+
+    public static Event getTestEvent() {
+        return new Event("Test Event", LocalDate.now(), "This is a test event.");
     }
 
 }

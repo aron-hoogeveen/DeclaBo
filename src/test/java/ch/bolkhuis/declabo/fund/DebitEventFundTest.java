@@ -1,6 +1,7 @@
 package ch.bolkhuis.declabo.fund;
 
 import ch.bolkhuis.declabo.event.Event;
+import ch.bolkhuis.declabo.event.EventTest;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,7 +13,7 @@ public class DebitEventFundTest {
     public void should_set_all_fields_on_construction() {
         String name = "name";
         long balance = 2L;
-        Event event = Event.getTestEvent();
+        Event event = EventTest.getTestEvent();
         DebitEventFund fund = new DebitEventFund(name, balance, event);
 
         assertThat(fund).hasFieldOrPropertyWithValue("name", name);
@@ -22,7 +23,7 @@ public class DebitEventFundTest {
 
     @Test
     public void should_increase_balance_when_debited_and_decrease_when_credited() {
-        DebitEventFund fund = new DebitEventFund("name", 0L, Event.getTestEvent());
+        DebitEventFund fund = new DebitEventFund("name", 0L, EventTest.getTestEvent());
         assertThat(fund.getBalance()).isEqualTo(0L);
 
         fund.debit(2L);

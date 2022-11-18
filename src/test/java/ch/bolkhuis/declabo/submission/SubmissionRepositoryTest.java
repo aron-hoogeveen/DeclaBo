@@ -1,7 +1,9 @@
 package ch.bolkhuis.declabo.submission;
 
 import ch.bolkhuis.declabo.event.Event;
+import ch.bolkhuis.declabo.event.EventTest;
 import ch.bolkhuis.declabo.user.FundUser;
+import ch.bolkhuis.declabo.user.FundUserTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -32,8 +34,8 @@ public class SubmissionRepositoryTest {
     public void should_store_a_submission() {
         LocalDate createdOn = LocalDate.now();
         LocalDate date = LocalDate.now();
-        FundUser paidBy = FundUser.getTestUser();
-        Event event = Event.getTestEvent();
+        FundUser paidBy = FundUserTest.getTestCreditFundUser();
+        Event event = EventTest.getTestEvent();
         String name = "name of submission";
         String remarks = "any remarks";
         Status status = Status.BEING_CREATED;

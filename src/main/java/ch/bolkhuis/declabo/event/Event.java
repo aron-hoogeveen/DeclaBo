@@ -172,8 +172,4 @@ public class Event {
         return "@Event{name:" + name + ", date:" + date + "}";
     }
 
-    public static Event getTestEvent() {
-        return new Event("Test Event", LocalDate.now(), "This is a test event.");
-    }
-
 }

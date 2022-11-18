@@ -1,8 +1,10 @@
 package ch.bolkhuis.declabo.submission;
 
 import ch.bolkhuis.declabo.event.Event;
+import ch.bolkhuis.declabo.event.EventTest;
 import ch.bolkhuis.declabo.fund.CreditFund;
 import ch.bolkhuis.declabo.user.FundUser;
+import ch.bolkhuis.declabo.user.FundUserTest;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -185,6 +187,19 @@ public class SubmissionTest {
                         initialStatus + " to " + newStatus + " should not be possible.");
             }
         }
+    }
+
+    /**
+     * Returns a Submission that can be used for testing.
+     *
+     * The status is set to {@code Status.BEING_CREATED} to allow for changing of the fields.
+     *
+     * @return a test Submission
+     */
+    public static Submission getTestSubmission_beingCreated() {
+        return new Submission(LocalDate.now(), LocalDate.now(), FundUserTest.getTestCreditFundUser(),
+                EventTest.getTestEvent(), "Test Submission", "No remarks",
+                Status.BEING_CREATED);
     }
 
 }

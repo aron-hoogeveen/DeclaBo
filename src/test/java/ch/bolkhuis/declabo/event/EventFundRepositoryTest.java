@@ -1,6 +1,5 @@
 package ch.bolkhuis.declabo.event;
 
-import ch.bolkhuis.declabo.event.Event;
 import ch.bolkhuis.declabo.fund.CreditEventFund;
 import ch.bolkhuis.declabo.fund.DebitEventFund;
 import ch.bolkhuis.declabo.fund.EventFund;
@@ -33,7 +32,7 @@ public class EventFundRepositoryTest {
     public void should_store_an_eventfund() {
         String name = "Event Fund";
         long balance = 36L;
-        Event event = entityManager.persist(Event.getTestEvent());
+        Event event = entityManager.persist(EventTest.getTestEvent());
         EventFund fund = repository.save(new CreditEventFund(name, balance, event));
 
         assertThat(fund).hasFieldOrPropertyWithValue("name", name);
@@ -43,7 +42,7 @@ public class EventFundRepositoryTest {
 
     @Test
     public void should_find_all_eventfunds() {
-        Event event = entityManager.persist(Event.getTestEvent());
+        Event event = entityManager.persist(EventTest.getTestEvent());
 
         EventFund f1 = new CreditEventFund("Event Fund 1", 2L, event);
         entityManager.persist(f1);

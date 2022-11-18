@@ -197,14 +197,4 @@ public class Submission {
         return Objects.hash(createdOn, date, paidBy, name);
     }
 
-    /**
-     * Utility method for quick testing.
-     *
-     * Sets the status of the returned Submission to Status.BEING_CREATED to allow field changes.
-     */
-    public static Submission getTestSubmission_beingCreated() {
-        return new Submission(LocalDate.now(), LocalDate.now(), FundUser.getTestUser(),
-                Event.getTestEvent(), "Test Submission", "No remarks",
-                Status.BEING_CREATED);
-    }
 }
