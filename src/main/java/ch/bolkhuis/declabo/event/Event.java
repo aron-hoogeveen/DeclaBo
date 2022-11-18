@@ -64,6 +64,9 @@ public class Event {
     /**
      * Create a new Event.
      *
+     * For {@code attendants} and {@code funds} new HashSets are created to ensure modifiability of
+     * the sets.
+     *
      * @param name the name
      * @param date the (starting) date
      * @param description a descriptive message
@@ -72,12 +75,11 @@ public class Event {
      */
     public Event(@NotNull String name, @NotNull LocalDate date, @NotNull String description,
                  @NotNull Set<FundUser> attendants, Set<EventFund> funds) {
-        // FIXME attendants and funds should be modifiable
         this.name = Objects.requireNonNull(name);
         this.date = Objects.requireNonNull(date);
         this.description = Objects.requireNonNull(description);
-        this.attendants = Objects.requireNonNull(attendants);
-        this.funds = Objects.requireNonNull(funds);
+        this.attendants = new HashSet<>(Objects.requireNonNull(attendants));
+        this.funds = new HashSet<>(Objects.requireNonNull(funds));
     }
 
     public Long getId() {
@@ -119,7 +121,19 @@ public class Event {
         return attendants;
     }
 
+    /**
+     * Sets the attendants.
+     *
+     * The set must not contain a null value not be null itself.
+     *
+     * @param attendants the set of attendants
+     * @throws NullPointerException if {@code attendants} contains a null value or is null
+     */
     public void setAttendants(@NotNull Set<FundUser> attendants) {
+        Objects.requireNonNull(attendants);
+        if (attendants.contains(null))
+            throw new NullPointerException("Null valued attendants are not allowed");
+
         this.attendants = Objects.requireNonNull(attendants);
     }
 
@@ -135,11 +149,22 @@ public class Event {
      *         otherwise
      */
     public boolean removeAttendant(@NotNull FundUser attendant) {
-        return attendants.remove(attendant);
+        return attendants.remove(Objects.requireNonNull(attendant));
     }
 
+    /**
+     * Adds all attendants to the set of attendants.
+     *
+     * The set must not contain null values.
+     *
+     * @param attendants the attendants to add
+     * @throws NullPointerException if {@code attendants} is null or contains a null value
+     */
     public void addAttendants(@NotNull Set<FundUser> attendants) {
-        // FIXME check that there are no null-valued attendants
+        Objects.requireNonNull(attendants);
+        if (attendants.contains(null))
+            throw new NullPointerException("The set must not contain null valued elements");
+
         this.attendants.addAll(attendants);
     }
 

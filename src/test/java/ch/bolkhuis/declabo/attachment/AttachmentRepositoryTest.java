@@ -35,7 +35,7 @@ public class AttachmentRepositoryTest {
         String path = "/home/path/to/file.jpg";
         String notes = "some notes";
 
-        Submission submission = SubmissionTest.getTestSubmission_beingCreated(); // FIXME remove coupling between test classes and object classes
+        Submission submission = SubmissionTest.getTestSubmission_beingCreated();
         submission.setPaidBy(entityManager.persist(submission.getPaidBy()));
         submission.setEvent(entityManager.persist(submission.getEvent()));
         submission = entityManager.persist(submission);
