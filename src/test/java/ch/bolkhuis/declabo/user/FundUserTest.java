@@ -24,4 +24,9 @@ public class FundUserTest {
         assertThat(user).hasFieldOrPropertyWithValue("fund", fund);
     }
 
+    public static FundUser getTestCreditFundUser() {
+        CreditFund fund = new CreditFund("John Smith", 420L);
+        return new FundUser("john@bolkhuis.ch", "John", "Smith", 101, fund);
+    }
+
 }

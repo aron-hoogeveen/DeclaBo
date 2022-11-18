@@ -44,9 +44,5 @@ public class FundUser extends User {
         return "FundUser";
     }
 
-    public static FundUser getTestUser() {
-        CreditFund fund = new CreditFund("Aron Hoogeveen", 420L);
-        return new FundUser("aron@bolkhuis.ch", "Aron", "Hoogeveen", 101, fund);
-    }
 
 }

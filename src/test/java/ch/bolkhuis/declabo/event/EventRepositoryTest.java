@@ -53,33 +53,4 @@ public class EventRepositoryTest {
         assertThrows(DataIntegrityViolationException.class, () -> repository.saveAllAndFlush(List.of(e1, e2)));
     }
 
-    // FIXME I thought that the attendants would not be available if not fetched, but this test \
-    // shows otherwise. Investigate at a later moment
-//    @Test
-//    public void should_fetch_attendants_if_asked() {
-//        FundUser user1 = entityManager.persist(FundUser.getTestUser());
-//        FundUser user2 = FundUser.getTestUser();
-//        user2.setName("Person 2");
-//        user2.setEmail("person2@bolkhuis.ch");
-//        user2.setRoom(222);
-//        entityManager.persist(user2);
-//
-//        Event event = repository.saveAndFlush(new Event("name", LocalDate.now(), "description"));
-//        event.addAttendants(Set.of(user1, user2));
-//        repository.saveAndFlush(event); // persist the attendants
-//        entityManager.clear(); // clear the cache
-//
-//        List<Event> events = repository.findAll();
-//        assertThat(events).hasSize(1);
-//        Event e = events.get(0);
-//        Set<FundUser> attendants = e.getAttendants();
-//        for (FundUser fu: attendants) {
-//            System.out.println(fu);
-//        }
-//        assertThrows(IllegalArgumentException.class, () -> {events.get(0).getAttendants();});
-//        List<Event> eventsWithAttendants = repository.findAllFetchAttendants();
-//        assertThat(events).hasSize(1);
-//        assertDoesNotThrow(() -> {eventsWithAttendants.get(0).getAttendants();});
-//    }
-
 }
