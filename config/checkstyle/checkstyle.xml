@@ -12,7 +12,6 @@
     To suppress certain violations please review suppression filters.
     Authors: Max Vetrenko, Ruslan Diachenko, Roman Ivanov.
  -->
-
 <module name = "Checker">
     <property name="charset" value="UTF-8"/>
 
@@ -342,5 +341,6 @@
                       default="checkstyle-xpath-suppressions.xml" />
             <property name="optional" value="true"/>
         </module>
+        <module name="SuppressionCommentFilter"/>
     </module>
 </module>

@@ -1,6 +1,7 @@
 package ch.bolkhuis.declabo.user;
 
-import org.jetbrains.annotations.NotNull;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.hateoas.server.core.Relation;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,8 +12,12 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Relation(collectionRelation = "users", itemRelation = "user")
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED) // we want null constraints
 @Table(name = "custom_user", uniqueConstraints =
@@ -24,20 +29,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @NotNull
+    @NotBlank(message = "Email should not be blank")
     @Column(nullable = false, unique = true)
     protected String email;
 
-    @NotNull
+    @NotBlank(message = "Name should not be blank")
     @Column(nullable = false, updatable = false)
     protected String name;
 
-    @NotNull
+    @NotBlank(message = "Surname should not be blank")
     @Column(nullable = false, updatable = false)
     protected String surname;
 
     @Column(unique = true)
-    protected int room;
+    protected int room; // FIXME should be an Integer, so we can apply validation. With an int, if the user leaves out the field in json, it is set to 0.
 
     /** Default constructor. Should not be used. Is here only for Spring */
     protected User() {}
