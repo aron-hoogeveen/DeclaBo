@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -19,6 +20,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Controller
+@RequestMapping("api/users")
 public class UserController {
 
     private final transient UserRepository repository;
@@ -30,7 +32,7 @@ public class UserController {
         this.assembler = assembler;
     }
 
-    @GetMapping("/users")
+    @GetMapping()
     ResponseEntity<?> getAll() {
         List<EntityModel<User>> users = repository.findAll().stream()
                 .map(assembler::toModel)
@@ -41,7 +43,7 @@ public class UserController {
         ));
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     ResponseEntity<?> getOne(@PathVariable Long id) {
         User user = repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         return ResponseEntity.ok(assembler.toModel(user));
@@ -50,7 +52,7 @@ public class UserController {
     /*
      * TODO check all parameters of the new user before processing. This is where the validation should happen
      */
-    @PostMapping("/users")
+    @PostMapping()
     ResponseEntity<?> create(@Valid @RequestBody User user) {
 //        if (user == null)
 //            throw new UserBadRequestException("User could not be made. Probably not all fields were presented");
@@ -62,7 +64,7 @@ public class UserController {
                 .body(assembler.toModel(user));
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/{id}")
     ResponseEntity<?> delete(@PathVariable Long id) {
         repository.deleteById(id);
         return ResponseEntity.ok(linkTo(methodOn(UserController.class).getAll()).withRel("users"));
@@ -74,7 +76,7 @@ public class UserController {
      * @param user the user to update or create
      * @return the created or updated user
      */
-    @PutMapping("/users")
+    @PutMapping()
     ResponseEntity<?> createOrUpdate(@Valid @RequestBody User user) {
         if (user.getId() == null) {
             user = repository.saveAndFlush(user);

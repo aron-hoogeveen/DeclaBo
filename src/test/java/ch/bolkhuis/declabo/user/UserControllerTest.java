@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(UserModelAssembler.class)
 public class UserControllerTest {
 
-    private static final String BASE_PATH = "http://localhost/users";
+    private static final String BASE_PATH = "http://localhost/api/users";
 
     @Autowired
     private MockMvc mvc;
