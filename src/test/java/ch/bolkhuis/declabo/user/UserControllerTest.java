@@ -17,15 +17,20 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-//CHECKSTYLE:OFF
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 //CHECKSTYLE:ON
 
 @SuppressWarnings("PMD")
-@WebMvcTest
-@Import(UserModelAssembler.class)
+@WebMvcTest(UserController.class)
+@Import({
+        UserModelAssembler.class
+})
 public class UserControllerTest {
 
     private static final String BASE_PATH = "http://localhost/api/users";
@@ -158,7 +163,7 @@ public class UserControllerTest {
     public void should_reject_user_with_blank_fields_that_should_be_notblank() throws Exception {
         init_repository_with_two_users();
 
-        String halJsonValue = "{\"id\": null, \"name\": \"\", \"surname\": \"\", \"email\": \"\", \"room\": 1}";
+        String halJsonValue = "{\"name\": \"\", \"surname\": \"\", \"email\": \"\", \"room\": 1}";
         ResultActions result = mvc.perform(post(BASE_PATH)
                 .accept(MediaTypes.HAL_JSON_VALUE)
                 .content(halJsonValue)

@@ -1,8 +1,11 @@
 package ch.bolkhuis.declabo.fund;
 
+import org.springframework.hateoas.server.core.Relation;
+
 import javax.persistence.Entity;
 
 @Entity
+@Relation(collectionRelation = "debitFunds", itemRelation = "debitFund")
 public class DebitFund extends Fund {
 
     protected static String toStringID = "DebitFund";
@@ -47,6 +50,11 @@ public class DebitFund extends Fund {
 
     @Override
     protected String getIdString() {
+        return "DebitFund";
+    }
+
+    @Override
+    public String getType() {
         return "DebitFund";
     }
 

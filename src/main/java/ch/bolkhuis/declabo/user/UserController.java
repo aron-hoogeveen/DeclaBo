@@ -1,5 +1,6 @@
 package ch.bolkhuis.declabo.user;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpHeaders;
@@ -23,10 +24,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping("api/users")
 public class UserController {
 
-    private final transient UserRepository repository;
+    private transient UserRepository repository;
 
-    private final transient UserModelAssembler assembler;
+    private transient UserModelAssembler assembler;
 
+    @Autowired
     public UserController(UserRepository repository, UserModelAssembler assembler) {
         this.repository = repository;
         this.assembler = assembler;

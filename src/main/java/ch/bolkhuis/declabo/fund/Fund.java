@@ -1,6 +1,7 @@
 package ch.bolkhuis.declabo.fund;
 
-import org.jetbrains.annotations.NotNull;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.hateoas.server.core.Relation;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,8 +10,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Relation(collectionRelation = "funds", itemRelation = "fund")
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Fund {
@@ -21,7 +26,7 @@ public abstract class Fund {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @NotNull
+    @NotBlank(message = "Name should not be blank")
     @Column(nullable = false, unique = true)
     protected String name;
 
@@ -92,5 +97,12 @@ public abstract class Fund {
     protected String getIdString() {
         return "Fund";
     }
+
+    /**
+     * Returns a String that is unique for this class. It is used only for serialization.
+     *
+     * @return a String that represents this class
+     */
+    public abstract String getType();
 
 }

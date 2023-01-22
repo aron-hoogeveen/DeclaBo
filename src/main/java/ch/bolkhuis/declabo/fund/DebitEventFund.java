@@ -50,4 +50,9 @@ public class DebitEventFund extends EventFund {
         return "DebitEventFund";
     }
 
+    @Override
+    public String getType() {
+        return "DebitEventFund";
+    }
+
 }

@@ -50,4 +50,9 @@ public class CreditEventFund extends EventFund {
         return "CreditEventFund";
     }
 
+    @Override
+    public String getType() {
+        return "CreditEventFund";
+    }
+
 }
