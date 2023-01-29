@@ -56,12 +56,4 @@ public class FundErrorAdvice {
         return ex.getErrors();
     }
 
-    // FIXME the following ExceptionHandler should be removed after development
-    @ResponseBody
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String handleGenericException(Exception ex) {
-        return "toString(): " + ex.toString() + "\nMessage: " + ex.getMessage();
-    }
-
 }

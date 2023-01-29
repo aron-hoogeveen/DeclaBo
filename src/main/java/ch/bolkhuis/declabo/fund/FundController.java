@@ -116,11 +116,12 @@ public class FundController {
      */
     private ResponseEntity<?> createOrUpdateFund(Fund fund) {
         if (fund.getId() == null) {
-            fund = repository.saveAndFlush(fund);
-            return ResponseEntity
-                    .created(linkTo(methodOn(FundController.class).getOne(fund.getId())).toUri())
-                    .header(HttpHeaders.CONTENT_LOCATION, linkTo(methodOn(FundController.class).getOne(fund.getId())).toString())
-                    .body(assembler.toModel(fund));
+            return createFund(fund);
+        }
+
+        // update fund
+        if (repository.existsByNameAndIdNot(fund.getName(), fund.getId())) {
+            throw new ConstraintViolationException(Map.of("name", errorMessages.get("constraintName")));
         }
 
         fund = repository.saveAndFlush(fund);
