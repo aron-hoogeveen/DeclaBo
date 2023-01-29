@@ -220,6 +220,46 @@ public class FundControllerTest {
     }
 
     @Test
+    public void should_reject_fund_with_data_constraint_violations_debit() throws Exception {
+        init_repository_with_two_funds();
+
+        String name = "existing name";
+        given(repository.existsByName(name)).willReturn(true);
+
+        // assume that there is already a fund with name "existing name"
+        String content = "{\"name\": \"" + name + "\", \"balance\": 0}";
+
+        ResultActions result = mvc.perform(post(BASE_PATH + "/debit")
+                .accept(MediaTypes.HAL_JSON_VALUE)
+                .content(content)
+                .contentType(MediaTypes.HAL_JSON_VALUE));
+
+        result.andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.name").value("This name already exists"));
+    }
+
+    @Test
+    public void should_reject_fund_with_data_constraint_violations_credit() throws Exception {
+        init_repository_with_two_funds();
+
+        String name = "existing name";
+        given(repository.existsByName(name)).willReturn(true);
+
+        // assume that there is already a fund with name "existing name"
+        String content = "{\"name\": \"" + name + "\", \"balance\": 0}";
+
+        ResultActions result = mvc.perform(post(BASE_PATH + "/credit")
+                .accept(MediaTypes.HAL_JSON_VALUE)
+                .content(content)
+                .contentType(MediaTypes.HAL_JSON_VALUE));
+
+        result.andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.name").value("This name already exists"));
+    }
+
+    @Test
     public void should_reject_fund_with_missing_fields_for_debitfund() throws Exception {
         init_repository_with_two_funds();
 
@@ -434,6 +474,55 @@ public class FundControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.name").exists());
     }
+
+    // FIXME following tests should be worked out and implemented in the controller class.
+//    @Test
+//    public void should_return_bad_request_for_put_debit_with_constraint_violation() throws Exception {
+//        init_repository_with_two_funds();
+//
+//        // FIXME see next comment about implementation
+//        /*
+//         * If we are updating an existing fund and we are not changing the name, we should not
+//         * return a BAD_REQUEST with a constraint violation for field NAME. However, if we are
+//         * updating an existing fund and we want to change the name to an existing different name
+//         * we SHOULD receive a BAD_REQUEST with a constraint violation for field NAME.
+//         */
+//
+//        // assume that the name already exists
+//        String name = "existing name";
+//        given(repository.existsByName(name)).willReturn(true);
+//
+//        String content = "{\"name\": \"" + name + "\"}";
+//
+//        ResultActions result = mvc.perform(put(BASE_PATH + "debit")
+//                .accept(MediaTypes.HAL_JSON_VALUE)
+//                .content(content)
+//                .contentType(MediaTypes.HAL_JSON_VALUE));
+//
+//        result.andDo(print())
+//                .andExpect(status().isBadRequest())
+//                .andExpect(jsonPath("$.name").value(FundController.errorMessages.get("constraintName")));
+//    }
+//
+//    @Test
+//    public void should_return_bad_request_for_put_credit_with_constraint_violation() throws Exception {
+//        init_repository_with_two_funds();
+//
+//        // assume that the name already exists
+//        String name = "existing name";
+//        given(repository.existsByName(name)).willReturn(true);
+//
+//        String content = "{\"name\": \"" + name + "\"}";
+//
+//        ResultActions result = mvc.perform(put(BASE_PATH + "credit")
+//                .accept(MediaTypes.HAL_JSON_VALUE)
+//                .content(content)
+//                .contentType(MediaTypes.HAL_JSON_VALUE));
+//
+//        result.andDo(print())
+//                .andExpect(status().isBadRequest())
+//                .andExpect(jsonPath("$.name").value(FundController.errorMessages.get("constraintName")));
+//    }
 
     private void init_repository_with_two_funds() {
         given(repository.findAll()).willReturn(Arrays.asList(funds));
