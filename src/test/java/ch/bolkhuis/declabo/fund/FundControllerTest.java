@@ -3,6 +3,8 @@ package ch.bolkhuis.declabo.fund;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -219,8 +221,9 @@ public class FundControllerTest {
         verifySingleJson(result, savedFund);
     }
 
-    @Test
-    public void should_reject_fund_with_data_constraint_violations_debit() throws Exception {
+    @ParameterizedTest
+    @ValueSource(strings = {"/debit", "/credit"})
+    public void should_reject_fund_with_data_constraint_violations(String path) throws Exception {
         init_repository_with_two_funds();
 
         String name = "existing name";
@@ -229,7 +232,7 @@ public class FundControllerTest {
         // assume that there is already a fund with name "existing name"
         String content = "{\"name\": \"" + name + "\", \"balance\": 0}";
 
-        ResultActions result = mvc.perform(post(BASE_PATH + "/debit")
+        ResultActions result = mvc.perform(post(BASE_PATH + path)
                 .accept(MediaTypes.HAL_JSON_VALUE)
                 .content(content)
                 .contentType(MediaTypes.HAL_JSON_VALUE));
@@ -239,32 +242,13 @@ public class FundControllerTest {
                 .andExpect(jsonPath("$.name").value("This name already exists"));
     }
 
-    @Test
-    public void should_reject_fund_with_data_constraint_violations_credit() throws Exception {
-        init_repository_with_two_funds();
-
-        String name = "existing name";
-        given(repository.existsByName(name)).willReturn(true);
-
-        // assume that there is already a fund with name "existing name"
-        String content = "{\"name\": \"" + name + "\", \"balance\": 0}";
-
-        ResultActions result = mvc.perform(post(BASE_PATH + "/credit")
-                .accept(MediaTypes.HAL_JSON_VALUE)
-                .content(content)
-                .contentType(MediaTypes.HAL_JSON_VALUE));
-
-        result.andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.name").value("This name already exists"));
-    }
-
-    @Test
-    public void should_reject_fund_with_missing_fields_for_debitfund() throws Exception {
+    @ParameterizedTest
+    @ValueSource(strings = {"/debit", "/credit"})
+    public void should_reject_fund_with_missing_fields(String path) throws Exception {
         init_repository_with_two_funds();
 
         String halJsonValue = "{}";
-        ResultActions result = mvc.perform(post(BASE_PATH + "/debit")
+        ResultActions result = mvc.perform(post(BASE_PATH + path)
                 .accept(MediaTypes.HAL_JSON_VALUE)
                 .content(halJsonValue)
                 .contentType(MediaTypes.HAL_JSON_VALUE));
@@ -274,44 +258,14 @@ public class FundControllerTest {
                 .andExpect(jsonPath("$.name").exists());
     }
 
-    @Test
-    public void should_reject_fund_with_missing_fields_for_creditfund() throws Exception {
+    @ParameterizedTest
+    @ValueSource(strings = {"/debit", "/credit"})
+    public void should_reject_blank_fields_for_debitfund(String path) throws Exception {
         init_repository_with_two_funds();
 
-        String halJsonValue = "{}";
-        ResultActions result = mvc.perform(post(BASE_PATH + "/credit")
-                .accept(MediaTypes.HAL_JSON_VALUE)
-                .content(halJsonValue)
-                .contentType(MediaTypes.HAL_JSON_VALUE));
+        String halJsonValue = "{\"name\": \"\", \"balance\": " + 0 + "}";
 
-        result.andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.name").exists());
-    }
-
-    @Test
-    public void should_reject_blank_fields_for_debitfund() throws Exception {
-        init_repository_with_two_funds();
-
-        String halJsonValue = "{\"name\": \"\", \"balance\": " + 0 + ", \"type\": \"\"}";
-
-        ResultActions result = mvc.perform(post(BASE_PATH + "/debit")
-                .accept(MediaTypes.HAL_JSON_VALUE)
-                .content(halJsonValue)
-                .contentType(MediaTypes.HAL_JSON_VALUE));
-
-        result.andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.name").exists());
-    }
-
-    @Test
-    public void should_reject_blank_fields_for_creditfund() throws Exception {
-        init_repository_with_two_funds();
-
-        String halJsonValue = "{\"name\": \"\", \"balance\": " + 0 + ", \"type\": \"\"}";
-
-        ResultActions result = mvc.perform(post(BASE_PATH + "/credit")
+        ResultActions result = mvc.perform(post(BASE_PATH + path)
                 .accept(MediaTypes.HAL_JSON_VALUE)
                 .content(halJsonValue)
                 .contentType(MediaTypes.HAL_JSON_VALUE));
@@ -367,29 +321,14 @@ public class FundControllerTest {
         verifySingleJson(result, savedFund);
     }
 
-    @Test
-    public void should_reject_blank_fields_for_put_debitfund() throws Exception {
+    @ParameterizedTest
+    @ValueSource(strings = {"/debit", "/credit"})
+    public void should_reject_blank_fields_for_put(String path) throws Exception {
         init_repository_with_two_funds();
 
         String halJsonValue = "{\"name\": \"\", \"balance\": " + 0 + "}";
 
-        ResultActions result = mvc.perform(put(BASE_PATH + "/debit")
-                .accept(MediaTypes.HAL_JSON_VALUE)
-                .content(halJsonValue)
-                .contentType(MediaTypes.HAL_JSON_VALUE));
-
-        result.andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.name").exists());
-    }
-
-    @Test
-    public void should_reject_blank_fields_for_put_creditfund() throws Exception {
-        init_repository_with_two_funds();
-
-        String halJsonValue = "{\"name\": \"\", \"balance\": " + 0 + "}";
-
-        ResultActions result = mvc.perform(put(BASE_PATH + "/credit")
+        ResultActions result = mvc.perform(put(BASE_PATH + path)
                 .accept(MediaTypes.HAL_JSON_VALUE)
                 .content(halJsonValue)
                 .contentType(MediaTypes.HAL_JSON_VALUE));
@@ -445,12 +384,13 @@ public class FundControllerTest {
         verifySingleJson(result, savedFund);
     }
 
-    @Test
-    public void should_reject_put_on_missing_fields_for_debitfund() throws Exception {
+    @ParameterizedTest
+    @ValueSource(strings = {"/debit", "/credit"})
+    public void should_reject_put_on_missing_fields(String path) throws Exception {
         init_repository_with_two_funds();
 
         String halJsonValue = "{}";
-        ResultActions result = mvc.perform(put(BASE_PATH + "/debit")
+        ResultActions result = mvc.perform(put(BASE_PATH + path)
                 .accept(MediaTypes.HAL_JSON_VALUE)
                 .content(halJsonValue)
                 .contentType(MediaTypes.HAL_JSON_VALUE));
@@ -460,19 +400,59 @@ public class FundControllerTest {
                 .andExpect(jsonPath("$.name").exists());
     }
 
-    @Test
-    public void should_reject_put_on_missing_fields_for_creditfund() throws Exception {
+    /*
+     * Put request.
+     *
+     * Create New:
+     *   - Name should not already exist.
+     *
+     * Update Existing:
+     *   - Name may be equal to current name.
+     *   - Name should not be equal to an existing name of a different fund
+     */
+
+    @ParameterizedTest
+    @ValueSource(strings = {"/debit", "/credit"})
+    public void should_return_bad_request_for_put_existing_fund_with_constraint_violation(String path) throws Exception {
         init_repository_with_two_funds();
 
-        String halJsonValue = "{}";
-        ResultActions result = mvc.perform(put(BASE_PATH + "/credit")
+        String name = "existing name";
+        Long id = 45L;
+        given(repository.existsByNameAndIdNot(name, id)).willReturn(true);
+
+        // remember, omitting field BALANCE will set it to 0
+        String content = "{\"id\": " + id + ", \"name\": " + name + "\"}";
+
+        ResultActions result = mvc.perform(put(BASE_PATH + path)
                 .accept(MediaTypes.HAL_JSON_VALUE)
-                .content(halJsonValue)
+                .content(content)
                 .contentType(MediaTypes.HAL_JSON_VALUE));
 
         result.andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.name").exists());
+                .andExpect(jsonPath("$.name").value(FundController.errorMessages.get("constraintName")));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"/debit", "/credit"})
+    public void should_return_bad_request_for_put_new_fund_with_constraint_violation(String path)
+        throws Exception {
+        init_repository_with_two_funds();
+
+        String name = "existing name";
+        given(repository.existsByNameAndIdNot(name, null)).willReturn(true);
+        given(repository.existsByName(name)).willReturn(true);
+
+        String content = "{\"name\": " + name + "\"}";
+
+        ResultActions result = mvc.perform(put(BASE_PATH + path)
+                .accept(MediaTypes.HAL_JSON_VALUE)
+                .content(content)
+                .contentType(MediaTypes.HAL_JSON_VALUE));
+
+        result.andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.name").value(FundController.errorMessages.get("constraintName")));
     }
 
     // FIXME following tests should be worked out and implemented in the controller class.
