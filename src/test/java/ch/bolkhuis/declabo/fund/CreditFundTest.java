@@ -13,7 +13,7 @@ public class CreditFundTest {
         long balance = 2L;
         CreditFund fund = new CreditFund(name, balance);
 
-        assertThat(fund).hasFieldOrPropertyWithValue("fundName", name);
+        assertThat(fund).hasFieldOrPropertyWithValue("name", name);
         assertThat(fund).hasFieldOrPropertyWithValue("balance", balance);
     }
 

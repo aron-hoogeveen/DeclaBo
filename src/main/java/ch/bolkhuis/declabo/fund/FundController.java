@@ -80,8 +80,8 @@ public class FundController {
             throw new IllegalArgumentException("A new fund must not have an id");
         }
 
-        if (repository.existsByFundName(fund.getFundName())) {
-            throw new ConstraintViolationException(Map.of("fundName", errorMessages.get("constraintName")));
+        if (repository.existsByName(fund.getName())) {
+            throw new ConstraintViolationException(Map.of("name", errorMessages.get("constraintName")));
         }
 
         fund = repository.saveAndFlush(fund);
@@ -120,8 +120,8 @@ public class FundController {
         }
 
         // update fund
-        if (repository.existsByFundNameAndIdNot(fund.getFundName(), fund.getId())) {
-            throw new ConstraintViolationException(Map.of("fundName", errorMessages.get("constraintName")));
+        if (repository.existsByNameAndIdNot(fund.getName(), fund.getId())) {
+            throw new ConstraintViolationException(Map.of("name", errorMessages.get("constraintName")));
         }
 
         fund = repository.saveAndFlush(fund);

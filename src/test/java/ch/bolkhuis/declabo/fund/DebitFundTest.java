@@ -13,7 +13,7 @@ public class DebitFundTest {
         long balance = 2L;
         DebitFund fund = new DebitFund(name, balance);
 
-        assertThat(fund).hasFieldOrPropertyWithValue("fundName", name);
+        assertThat(fund).hasFieldOrPropertyWithValue("name", name);
         assertThat(fund).hasFieldOrPropertyWithValue("balance", balance);
     }
 

@@ -35,7 +35,7 @@ public class EventFundRepositoryTest {
         Event event = entityManager.persist(EventTest.getTestEvent());
         EventFund fund = repository.save(new CreditEventFund(name, balance, event));
 
-        assertThat(fund).hasFieldOrPropertyWithValue("fundName", name);
+        assertThat(fund).hasFieldOrPropertyWithValue("name", name);
         assertThat(fund).hasFieldOrPropertyWithValue("balance", balance);
         assertThat(fund).hasFieldOrPropertyWithValue("event", event);
     }
