@@ -1,7 +1,6 @@
 package ch.bolkhuis.declabo.user;
 
 import ch.bolkhuis.declabo.exceptions.ConstraintViolationException;
-import org.aspectj.apache.bcel.util.ClassLoaderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
