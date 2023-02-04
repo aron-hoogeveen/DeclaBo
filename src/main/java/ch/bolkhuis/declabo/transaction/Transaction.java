@@ -3,8 +3,7 @@ package ch.bolkhuis.declabo.transaction;
 import ch.bolkhuis.declabo.event.Event;
 import ch.bolkhuis.declabo.fund.Fund;
 import ch.bolkhuis.declabo.submission.Submission;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +12,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -35,14 +38,17 @@ public class Transaction {
     @JoinColumn(nullable = false)
     protected Fund creditor;
 
+    @Positive
     protected long amount;
 
     @NotNull
     @Column(nullable = false)
+    @PastOrPresent
     protected LocalDate date;
 
     @NotNull
     @Column(nullable = false)
+    @NotBlank
     protected String description;
 
     @Nullable
@@ -60,7 +66,7 @@ public class Transaction {
     /**
      * Create a new Transaction.
      */
-    public Transaction(Fund debtor, Fund creditor, long amount, LocalDate date, String description,
+    public Transaction(Fund debtor, Fund creditor, long amount, LocalDate date, @NotNull String description,
                        @Nullable Submission submission, @Nullable Event event, boolean settled) {
         this.debtor = Objects.requireNonNull(debtor);
         this.creditor = Objects.requireNonNull(creditor);
