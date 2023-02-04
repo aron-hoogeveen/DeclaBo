@@ -16,7 +16,7 @@ public class DebitEventFundTest {
         Event event = EventTest.getTestEvent();
         DebitEventFund fund = new DebitEventFund(name, balance, event);
 
-        assertThat(fund).hasFieldOrPropertyWithValue("name", name);
+        assertThat(fund).hasFieldOrPropertyWithValue("fundName", name);
         assertThat(fund).hasFieldOrPropertyWithValue("balance", balance);
         assertThat(fund).hasFieldOrPropertyWithValue("event", event);
     }

@@ -28,14 +28,14 @@ public abstract class Fund {
 
     @NotBlank(message = "Name should not be blank")
     @Column(nullable = false, unique = true)
-    protected String name;
+    protected String fundName;
 
     protected long balance;
 
     protected Fund() {}
 
-    public Fund(String name, long balance) {
-        this.name = Objects.requireNonNull(name);
+    public Fund(String fundName, long balance) {
+        this.fundName = Objects.requireNonNull(fundName);
         this.balance = balance;
     }
 
@@ -48,12 +48,12 @@ public abstract class Fund {
     }
 
     @NotNull
-    public String getName() {
-        return name;
+    public String getFundName() {
+        return fundName;
     }
 
-    public void setName(@NotNull String name) {
-        this.name = Objects.requireNonNull(name);
+    public void setFundName(@NotNull String fundName) {
+        this.fundName = Objects.requireNonNull(fundName);
     }
 
     public long getBalance() {
@@ -73,17 +73,17 @@ public abstract class Fund {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Fund fund = (Fund) o;
-        return name.equals(fund.name);
+        return fundName.equals(fund.fundName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(fundName);
     }
 
     @Override
     public String toString() {
-        return "@" + getIdString() + "{name:" + name + "}";
+        return "@" + getIdString() + "{name:" + fundName + "}";
     }
 
     /**

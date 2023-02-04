@@ -80,11 +80,11 @@ public class FundControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
                 .andExpect(jsonPath("$._embedded.creditFunds[0].id").value(f1_id))
-                .andExpect(jsonPath("$._embedded.creditFunds[0].name").value(f1_name))
+                .andExpect(jsonPath("$._embedded.creditFunds[0].fundName").value(f1_name))
                 .andExpect(jsonPath("$._embedded.creditFunds[0].balance").value(f1_balance))
                 .andExpect(jsonPath("$._embedded.creditFunds[0].type").value(funds[0].getType()))
                 .andExpect(jsonPath("$._embedded.debitFunds[0].id").value(f2_id))
-                .andExpect(jsonPath("$._embedded.debitFunds[0].name").value(f2_name))
+                .andExpect(jsonPath("$._embedded.debitFunds[0].fundName").value(f2_name))
                 .andExpect(jsonPath("$._embedded.debitFunds[0].balance").value(f2_balance))
                 .andExpect(jsonPath("$._embedded.debitFunds[0].type").value(funds[1].getType()));
     }
@@ -129,7 +129,7 @@ public class FundControllerTest {
         DebitFund savedFund = new DebitFund(newName, newBalance);
         savedFund.setId(newId);
 
-        String content = "{\"name\": \"" + newName + "\", \"balance\": " + newBalance + "}";
+        String content = "{\"fundName\": \"" + newName + "\", \"balance\": " + newBalance + "}";
 
         given(repository.saveAndFlush(any(DebitFund.class))).willReturn(savedFund);
 
@@ -155,7 +155,7 @@ public class FundControllerTest {
         DebitFund savedFund = new DebitFund(newName, newBalance);
         savedFund.setId(newId);
 
-        String content = "{\"id\": " + newId + ", \"name\": \"" + newName + "\", \"balance\": " + newBalance + "}";
+        String content = "{\"id\": " + newId + ", \"fundName\": \"" + newName + "\", \"balance\": " + newBalance + "}";
 
         given(repository.saveAndFlush(any(DebitFund.class))).willReturn(savedFund);
 
@@ -180,7 +180,7 @@ public class FundControllerTest {
         CreditFund savedFund = new CreditFund(newName, newBalance);
         savedFund.setId(newId);
 
-        String content = "{\"id\": " + newId + ", \"name\": \"" + newName + "\", \"balance\": " + newBalance + "}";
+        String content = "{\"id\": " + newId + ", \"fundName\": \"" + newName + "\", \"balance\": " + newBalance + "}";
 
         given(repository.saveAndFlush(any(CreditFund.class))).willReturn(savedFund);
 
@@ -205,7 +205,7 @@ public class FundControllerTest {
         CreditFund savedFund = new CreditFund(newName, newBalance);
         savedFund.setId(newId);
 
-        String content = "{\"name\": \"" + newName + "\", \"balance\": " + newBalance + "}";
+        String content = "{\"fundName\": \"" + newName + "\", \"balance\": " + newBalance + "}";
 
         given(repository.saveAndFlush(any(CreditFund.class))).willReturn(savedFund);
 
@@ -233,10 +233,10 @@ public class FundControllerTest {
         init_repository_with_two_funds();
 
         String name = "existing name";
-        given(repository.existsByName(name)).willReturn(true);
+        given(repository.existsByFundName(name)).willReturn(true);
 
         // assume that there is already a fund with name "existing name"
-        String content = "{\"name\": \"" + name + "\", \"balance\": 0}";
+        String content = "{\"fundName\": \"" + name + "\", \"balance\": 0}";
 
         ResultActions result = mvc.perform(post(BASE_PATH + path)
                 .accept(MediaTypes.HAL_JSON_VALUE)
@@ -245,7 +245,7 @@ public class FundControllerTest {
 
         result.andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.name").value("This name already exists"));
+                .andExpect(jsonPath("$.fundName").value("This name already exists"));
     }
 
     /**
@@ -267,7 +267,7 @@ public class FundControllerTest {
 
         result.andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.name").exists());
+                .andExpect(jsonPath("$.fundName").exists());
     }
 
     /**
@@ -281,7 +281,7 @@ public class FundControllerTest {
     public void should_reject_blank_fields_for_debitfund(String path) throws Exception {
         init_repository_with_two_funds();
 
-        String halJsonValue = "{\"name\": \"\", \"balance\": " + 0 + "}";
+        String halJsonValue = "{\"fundName\": \"\", \"balance\": " + 0 + "}";
 
         ResultActions result = mvc.perform(post(BASE_PATH + path)
                 .accept(MediaTypes.HAL_JSON_VALUE)
@@ -290,7 +290,7 @@ public class FundControllerTest {
 
         result.andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.name").exists());
+                .andExpect(jsonPath("$.fundName").exists());
     }
 
     @Test
@@ -302,7 +302,7 @@ public class FundControllerTest {
         savedFund.setId(newId);
 
         // note that the new Fund has no `id` field.
-        String content = "{\"name\": \"" + newName + "\", \"balance\": " + newBalance + "}";
+        String content = "{\"fundName\": \"" + newName + "\", \"balance\": " + newBalance + "}";
 
         given(repository.saveAndFlush(any(DebitFund.class))).willReturn(savedFund);
 
@@ -325,7 +325,7 @@ public class FundControllerTest {
         savedFund.setId(newId);
 
         // note that the new Fund has no `id` field.
-        String content = "{\"name\": \"" + newName + "\", \"balance\": " + newBalance + "}";
+        String content = "{\"fundName\": \"" + newName + "\", \"balance\": " + newBalance + "}";
 
         given(repository.saveAndFlush(any(CreditFund.class))).willReturn(savedFund);
 
@@ -350,7 +350,7 @@ public class FundControllerTest {
     public void should_reject_blank_fields_for_put(String path) throws Exception {
         init_repository_with_two_funds();
 
-        String halJsonValue = "{\"name\": \"\", \"balance\": " + 0 + "}";
+        String halJsonValue = "{\"fundName\": \"\", \"balance\": " + 0 + "}";
 
         ResultActions result = mvc.perform(put(BASE_PATH + path)
                 .accept(MediaTypes.HAL_JSON_VALUE)
@@ -359,7 +359,7 @@ public class FundControllerTest {
 
         result.andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.name").exists());
+                .andExpect(jsonPath("$.fundName").exists());
     }
 
     @Test
@@ -371,7 +371,7 @@ public class FundControllerTest {
         savedFund.setId(newId);
 
         // note that the new Fund has already an `id` field
-        String content = "{\"id\": " + newId + ", \"name\": \"" + newName + "\", \"balance\": " + newBalance + "}";
+        String content = "{\"id\": " + newId + ", \"fundName\": \"" + newName + "\", \"balance\": " + newBalance + "}";
 
         given(repository.saveAndFlush(any(DebitFund.class))).willReturn(savedFund);
 
@@ -394,7 +394,7 @@ public class FundControllerTest {
         savedFund.setId(newId);
 
         // note that the new Fund has already an `id` field
-        String content = "{\"id\": " + newId + ", \"name\": \"" + newName + "\", \"balance\": " + newBalance + "}";
+        String content = "{\"id\": " + newId + ", \"fundName\": \"" + newName + "\", \"balance\": " + newBalance + "}";
 
         given(repository.saveAndFlush(any(CreditFund.class))).willReturn(savedFund);
 
@@ -427,7 +427,7 @@ public class FundControllerTest {
 
         result.andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.name").exists());
+                .andExpect(jsonPath("$.fundName").exists());
     }
 
     /*
@@ -454,10 +454,10 @@ public class FundControllerTest {
 
         String name = "existing name";
         Long id = 45L;
-        given(repository.existsByNameAndIdNot(name, id)).willReturn(true);
+        given(repository.existsByFundNameAndIdNot(name, id)).willReturn(true);
 
         // remember, omitting field BALANCE will set it to 0
-        String content = "{\"id\": " + id + ", \"name\": \"" + name + "\"}";
+        String content = "{\"id\": " + id + ", \"fundName\": \"" + name + "\"}";
 
         ResultActions result = mvc.perform(put(BASE_PATH + path)
                 .accept(MediaTypes.HAL_JSON_VALUE)
@@ -466,7 +466,7 @@ public class FundControllerTest {
 
         result.andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.name").value(FundController.errorMessages.get("constraintName")));
+                .andExpect(jsonPath("$.fundName").value(FundController.errorMessages.get("constraintName")));
     }
 
     /**
@@ -482,10 +482,10 @@ public class FundControllerTest {
         init_repository_with_two_funds();
 
         String name = "existing name";
-        given(repository.existsByNameAndIdNot(name, null)).willReturn(true);
-        given(repository.existsByName(name)).willReturn(true);
+        given(repository.existsByFundNameAndIdNot(name, null)).willReturn(true);
+        given(repository.existsByFundName(name)).willReturn(true);
 
-        String content = "{\"name\": \"" + name + "\"}";
+        String content = "{\"fundName\": \"" + name + "\"}";
 
         ResultActions result = mvc.perform(put(BASE_PATH + path)
                 .accept(MediaTypes.HAL_JSON_VALUE)
@@ -494,7 +494,7 @@ public class FundControllerTest {
 
         result.andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.name").value(FundController.errorMessages.get("constraintName")));
+                .andExpect(jsonPath("$.fundName").value(FundController.errorMessages.get("constraintName")));
     }
 
     private void init_repository_with_two_funds() {
@@ -508,7 +508,7 @@ public class FundControllerTest {
                 .andDo(print())
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
                 .andExpect(jsonPath("$.id").value(fund.getId()))
-                .andExpect(jsonPath("$.name").value(fund.getName()))
+                .andExpect(jsonPath("$.fundName").value(fund.getFundName()))
                 .andExpect(jsonPath("$.balance").value(fund.getBalance()))
                 .andExpect(jsonPath("$.type").value(fund.getType()))
                 .andExpect(jsonPath("$._links.self.href").value(BASE_PATH + "/" + fund.getId()))

@@ -16,7 +16,7 @@ public class CreditEventFundTest {
         Event event = EventTest.getTestEvent();
         CreditEventFund fund = new CreditEventFund(name, balance, event);
 
-        assertThat(fund).hasFieldOrPropertyWithValue("name", name);
+        assertThat(fund).hasFieldOrPropertyWithValue("fundName", name);
         assertThat(fund).hasFieldOrPropertyWithValue("balance", balance);
         assertThat(fund).hasFieldOrPropertyWithValue("event", event);
     }

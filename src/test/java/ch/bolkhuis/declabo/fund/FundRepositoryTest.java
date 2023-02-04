@@ -32,7 +32,7 @@ public class FundRepositoryTest {
         long balance = 69L;
         Fund fund = repository.save(new DebitFund(name, balance));
 
-        assertThat(fund).hasFieldOrPropertyWithValue("name", name);
+        assertThat(fund).hasFieldOrPropertyWithValue("fundName", name);
         assertThat(fund).hasFieldOrPropertyWithValue("balance", balance);
     }
 
