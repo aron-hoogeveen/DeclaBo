@@ -2,6 +2,7 @@ package ch.bolkhuis.declabo.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.hateoas.server.core.Relation;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
@@ -30,8 +32,12 @@ public class User {
     protected Long id;
 
     @NotBlank(message = "Email should not be blank")
+    @Email(message = "The given email is not valid")
     @Column(nullable = false, unique = true)
     protected String email;
+
+    @Column(nullable = true)
+    protected String nickname;
 
     @NotBlank(message = "Name should not be blank")
     @Column(nullable = false, updatable = false)
@@ -41,6 +47,7 @@ public class User {
     @Column(nullable = false, updatable = false)
     protected String surname;
 
+    @Nullable
     @Column(unique = true)
     protected int room; // FIXME should be an Integer, so we can apply validation. With an int, if the user leaves out the field in json, it is set to 0.
 
@@ -50,12 +57,13 @@ public class User {
     /**
      * Constructs a new User.
      */
-    public User(String email, String name, String surname, int room) {
+    public User(String email, String name, String surname, @Nullable String nickname, int room) {
         if (room < 0) throw new IllegalArgumentException("Room must be a positive number");
 
         this.email = Objects.requireNonNull(email);
         this.name = Objects.requireNonNull(name);
         this.surname = Objects.requireNonNull(surname);
+        this.nickname = nickname;
         this.room = room;
     }
 
@@ -92,6 +100,15 @@ public class User {
 
     public void setSurname(@NotNull String surname) {
         this.surname = Objects.requireNonNull(surname);
+    }
+
+    @Nullable
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(@Nullable String nickname) {
+        this.nickname = nickname;
     }
 
     public int getRoom() {

@@ -13,7 +13,7 @@ public class UserTest {
         String name = "Aron";
         String surname = "Hoogeveen";
         int room = 101;
-        User user = new User(email, name, surname, room);
+        User user = new User(email, name, surname, null, room);
 
         assertThat(user).hasFieldOrPropertyWithValue("email", email);
         assertThat(user).hasFieldOrPropertyWithValue("name", name);
@@ -25,14 +25,14 @@ public class UserTest {
     public void should_equal_when_name_and_surname_are_the_same() {
         String name = "Aron";
         String surname = "Hoogeveen";
-        User u1 = new User("1234", name, surname, 1);
-        User u2 = new User("5678", name, surname, 222);
+        User u1 = new User("1234", name, surname, null, 1);
+        User u2 = new User("5678", name, surname, null, 222);
         assertThat(u1).isEqualTo(u2);
 
-        User u3 = new User("1234", "Gerrit", surname, 1);
+        User u3 = new User("1234", "Gerrit", surname, null, 1);
         assertThat(u1).isNotEqualTo(u3);
 
-        User u4 = new User("1234", name, "van Oort", 1);
+        User u4 = new User("1234", name, "van Oort", null, 1);
         assertThat(u1).isNotEqualTo(u4);
     }
 

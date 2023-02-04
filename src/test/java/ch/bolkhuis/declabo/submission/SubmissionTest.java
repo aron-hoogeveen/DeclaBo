@@ -20,7 +20,7 @@ public class SubmissionTest {
     // default values for the default submission. See #getDefaultSubmission()
     private final LocalDate createdOn = LocalDate.of(2022, 1, 1);
     private final LocalDate date = LocalDate.of(2021, 12, 24);
-    private final FundUser paidBy = new FundUser("john@bolkhuis.ch", "John", "Smith", 404,
+    private final FundUser paidBy = new FundUser("john@bolkhuis.ch", "John", "Smith", null, 404,
             new CreditFund("John Smith", 0L));
     private final Event event = new Event("Default Event", LocalDate.of(2021, 12, 24), "Super Epic Event.");
     private final String name = "Default Submission";

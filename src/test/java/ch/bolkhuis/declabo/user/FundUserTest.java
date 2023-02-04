@@ -15,7 +15,7 @@ public class FundUserTest {
         String surname = "Hoogeveen";
         int room = 101;
         CreditFund fund = new CreditFund("Aron Hoogeveen", 0L);
-        FundUser user = new FundUser(email, name, surname, room, fund);
+        FundUser user = new FundUser(email, name, surname, null, room, fund);
 
         assertThat(user).hasFieldOrPropertyWithValue("email", email);
         assertThat(user).hasFieldOrPropertyWithValue("name", name);
@@ -26,7 +26,7 @@ public class FundUserTest {
 
     public static FundUser getTestCreditFundUser() {
         CreditFund fund = new CreditFund("John Smith", 420L);
-        return new FundUser("john@bolkhuis.ch", "John", "Smith", 101, fund);
+        return new FundUser("john@bolkhuis.ch", "John", "Smith", null, 101, fund);
     }
 
 }

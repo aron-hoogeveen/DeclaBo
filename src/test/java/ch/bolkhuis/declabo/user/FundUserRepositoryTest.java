@@ -35,7 +35,7 @@ public class FundUserRepositoryTest {
         String surname = "Hoogeveen";
         int room = 101;
         CreditFund fund = new CreditFund(name + " " + surname, 0L);
-        FundUser user = repository.save(new FundUser(email, name, surname, room, fund));
+        FundUser user = repository.save(new FundUser(email, name, surname, null, room, fund));
 
         assertThat(user).hasFieldOrPropertyWithValue("email", email);
         assertThat(user).hasFieldOrPropertyWithValue("name", name);
@@ -52,7 +52,7 @@ public class FundUserRepositoryTest {
         String surname = "Hoogeveen";
         int room = 101;
         CreditFund fund = new CreditFund(name + " " + surname, 0L);
-        FundUser user = repository.save(new FundUser(email, name, surname, room, fund));
+        FundUser user = repository.save(new FundUser(email, name, surname, null, room, fund));
 
         assertThat(user.getFund().getBalance()).isEqualTo(0L);
 

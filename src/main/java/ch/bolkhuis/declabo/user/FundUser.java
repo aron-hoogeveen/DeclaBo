@@ -2,6 +2,7 @@ package ch.bolkhuis.declabo.user;
 
 import ch.bolkhuis.declabo.fund.CreditFund;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -25,8 +26,9 @@ public class FundUser extends User {
     /** Default constructor. Should not be used. Is here only for Spring */
     protected FundUser() {}
 
-    public FundUser(String email, String name, String surname, int room, @NotNull CreditFund fund) {
-        super(email, name, surname, room);
+    public FundUser(String email, String name, String surname, @Nullable String nickname, int room,
+                    @NotNull CreditFund fund) {
+        super(email, name, surname, nickname, room);
         this.fund = Objects.requireNonNull(fund);
     }
 

@@ -66,8 +66,8 @@ public class UserControllerTest {
     @BeforeEach
     public void init() {
         users = new User[] {
-            new User(u1_email, u1_name, u1_surname, u1_room),
-            new User(u2_email, u2_name, u2_surname, u2_room)
+            new User(u1_email, u1_name, u1_surname, null, u1_room),
+            new User(u2_email, u2_name, u2_surname, null, u2_room)
         };
         users[0].setId(u1_id);
         users[1].setId(u2_id);
@@ -122,8 +122,8 @@ public class UserControllerTest {
         String newName = "New";
         String newSurname = "Surname";
         int newRoom = 5;
-        User newUser = new User(newEmail, newName, newSurname, newRoom);
-        User savedUser = new User(newEmail, newName, newSurname, newRoom);
+        User newUser = new User(newEmail, newName, newSurname, null, newRoom);
+        User savedUser = new User(newEmail, newName, newSurname, null, newRoom);
         savedUser.setId(3L);
 
         given(repository.saveAndFlush(any(User.class))).willReturn(savedUser);
@@ -219,9 +219,9 @@ public class UserControllerTest {
         String newName = "New";
         String newSurname = "Surname";
         int newRoom = 5;
-        User newUser = new User(newEmail, newName, newSurname, newRoom);
+        User newUser = new User(newEmail, newName, newSurname, null, newRoom);
         // note that the newUser has no ID field
-        User savedUser = new User(newEmail, newName, newSurname, newRoom);
+        User savedUser = new User(newEmail, newName, newSurname, null, newRoom);
         savedUser.setId(3L);
 
         given(repository.saveAndFlush(any(User.class))).willReturn(savedUser);
@@ -270,10 +270,10 @@ public class UserControllerTest {
         String newName = "New";
         String newSurname = "Surname";
         int newRoom = 5;
-        User newUser = new User(newEmail, newName, newSurname, newRoom);
+        User newUser = new User(newEmail, newName, newSurname, null, newRoom);
         newUser.setId(3L);
         // note that the newUser already has the ID field set
-        User savedUser = new User(newEmail, newName, newSurname, newRoom);
+        User savedUser = new User(newEmail, newName, newSurname, null, newRoom);
         savedUser.setId(3L);
 
         given(repository.saveAndFlush(any(User.class))).willReturn(savedUser);
