@@ -1,5 +1,7 @@
 package ch.bolkhuis.declabo.user;
 
+import ch.bolkhuis.declabo.exceptions.ConstraintViolationException;
+import org.aspectj.apache.bcel.util.ClassLoaderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -15,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -23,6 +27,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Controller
 @RequestMapping("api/users")
 public class UserController {
+
+    public static final Map<String, String> errorMessages = Map.of(
+            "constraintFullname", "The combination of name and surname already exists",
+            "constraintRoom", "There already exists a user with that room number",
+            "constraintEmail", "This email is already in use"
+    );
 
     private transient UserRepository repository;
 
@@ -51,13 +61,24 @@ public class UserController {
         return ResponseEntity.ok(assembler.toModel(user));
     }
 
-    /*
-     * TODO check all parameters of the new user before processing. This is where the validation should happen
-     */
     @PostMapping()
     ResponseEntity<?> create(@Valid @RequestBody User user) {
-//        if (user == null)
-//            throw new UserBadRequestException("User could not be made. Probably not all fields were presented");
+        Map<String, String> errors = new HashMap<>();
+
+        if (repository.existsByEmail(user.getEmail())) {
+            errors.put("email", errorMessages.get("constraintEmail"));
+        }
+        if (repository.existsByNameAndSurname(user.getName(), user.getSurname())) {
+            errors.put("full-name", errorMessages.get("constraintFullname"));
+        }
+        if (repository.existsByRoom(user.getRoom())) {
+            errors.put("room", errorMessages.get("constraintRoom"));
+        }
+
+        if (!errors.isEmpty()) {
+            throw new ConstraintViolationException(errors);
+        }
+
         user = repository.saveAndFlush(user);
 
         return ResponseEntity
@@ -81,11 +102,25 @@ public class UserController {
     @PutMapping()
     ResponseEntity<?> createOrUpdate(@Valid @RequestBody User user) {
         if (user.getId() == null) {
-            user = repository.saveAndFlush(user);
-            return ResponseEntity
-                    .created(linkTo(methodOn(UserController.class).getOne(user.getId())).toUri())
-                    .header(HttpHeaders.CONTENT_LOCATION, linkTo(methodOn(UserController.class).getOne(user.getId())).toString())
-                    .body(assembler.toModel(user));
+            // create
+            return create(user);
+        }
+
+        // update
+        Map<String, String> errors = new HashMap<>();
+
+        if (repository.existsByNameAndSurnameAndIdNot(user.getName(), user.getSurname(), user.getId())) {
+            errors.put("full-name", errorMessages.get("constraintFullname"));
+        }
+        if (repository.existsByEmailAndIdNot(user.getEmail(), user.getId())) {
+            errors.put("email", errorMessages.get("constraintEmail"));
+        }
+        if (repository.existsByRoomAndIdNot(user.getRoom(), user.getId())) {
+            errors.put("room", errorMessages.get("constraintRoom"));
+        }
+
+        if (!errors.isEmpty()) {
+            throw new ConstraintViolationException(errors);
         }
 
         user = repository.saveAndFlush(user);

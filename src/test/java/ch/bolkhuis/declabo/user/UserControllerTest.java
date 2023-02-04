@@ -177,6 +177,42 @@ public class UserControllerTest {
         // TODO change room number to `null` after converting to Boxed Integer.
     }
 
+    /**
+     * Test if the creation of a new user will be rejected when constraints are violated.
+     *
+     * The following constraints exist:
+     *   - The combination NAME and SURNAME must be unique;
+     *   - The email should be unique;
+     *   - The room number should be unique.
+     */
+    @Test
+    public void should_reject_new_user_with_constraint_violations() throws Exception {
+        init_repository_with_two_users();
+
+        String email = "existing@combination.com";
+        String name = "existing";
+        String surname = "combination";
+        int room = 101;
+
+        String content = "{\"name\": \"" + name + "\", \"surname\": \"" + surname + "\", \"email\": \"" + email + "\""
+                + ", \"room\": " + room + "}";
+
+        given(repository.existsByEmail(email)).willReturn(true);
+        given(repository.existsByNameAndSurname(name, surname)).willReturn(true);
+        given(repository.existsByRoom(room)).willReturn(true);
+
+        ResultActions result = mvc.perform(post(BASE_PATH)
+                .accept(MediaTypes.HAL_JSON_VALUE)
+                .content(content)
+                .contentType(MediaTypes.HAL_JSON_VALUE));
+
+        result.andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.email").value(UserController.errorMessages.get("constraintEmail")))
+                .andExpect(jsonPath("$.full-name").value(UserController.errorMessages.get("constraintFullname")))
+                .andExpect(jsonPath("$.room").value(UserController.errorMessages.get("constraintRoom")));
+    }
+
     @Test
     public void should_return_status_created_if_put_for_new_user() throws Exception {
         String newEmail = "new@bolkhuis.ch";
@@ -201,6 +237,34 @@ public class UserControllerTest {
     }
 
     @Test
+    public void should_return_bad_request_if_put_for_new_user_with_constraint_violation() throws Exception {
+        init_repository_with_two_users();
+
+        String email = "existing@combination.com";
+        String name = "existing";
+        String surname = "combination";
+        int room = 101;
+
+        String content = "{\"name\": \"" + name + "\", \"surname\": \"" + surname + "\", \"email\": \"" + email + "\""
+                + ", \"room\": " + room + "}";
+
+        given(repository.existsByEmail(email)).willReturn(true);
+        given(repository.existsByNameAndSurname(name, surname)).willReturn(true);
+        given(repository.existsByRoom(room)).willReturn(true);
+
+        ResultActions result = mvc.perform(put(BASE_PATH)
+                .accept(MediaTypes.HAL_JSON_VALUE)
+                .content(content)
+                .contentType(MediaTypes.HAL_JSON_VALUE));
+
+        result.andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.email").value(UserController.errorMessages.get("constraintEmail")))
+                .andExpect(jsonPath("$.full-name").value(UserController.errorMessages.get("constraintFullname")))
+                .andExpect(jsonPath("$.room").value(UserController.errorMessages.get("constraintRoom")));
+    }
+
+    @Test
     public void should_return_status_ok_if_put_for_existing_user() throws Exception {
         String newEmail = "new@bolkhuis.ch";
         String newName = "New";
@@ -222,7 +286,43 @@ public class UserControllerTest {
         result.andExpect(status().isOk())
                 .andExpect(header().string(HttpHeaders.CONTENT_LOCATION, BASE_PATH + "/" + savedUser.getId()));
         verifySingleJson(result, savedUser);
+    }
 
+    /**
+     * Test for constraint violations.
+     *
+     * The following constraints exist:
+     *   - cannot have the same NAME, SURNAME combination as another(!) user
+     *   - cannot have the same ROOM as another(!) user
+     *   - cannot have the same EMAIL as another(!) user
+     */
+    @Test
+    public void should_return_bad_request_when_put_for_existing_user_constraint_violations() throws Exception {
+        init_repository_with_two_users();
+
+        String email = "existing@combination.com";
+        String name = "existing";
+        String surname = "combination";
+        int room = 101;
+        Long id = 666L;
+
+        String content = "{\"id\": " + id + ", \"name\": \"" + name + "\", \"surname\": \"" + surname + "\", \"email\": \"" + email + "\""
+                + ", \"room\": " + room + "}";
+
+        given(repository.existsByNameAndSurnameAndIdNot(name, surname, id)).willReturn(true);
+        given(repository.existsByEmailAndIdNot(email, id)).willReturn(true);
+        given(repository.existsByRoomAndIdNot(room, id)).willReturn(true);
+
+        ResultActions result = mvc.perform(put(BASE_PATH)
+                .accept(MediaTypes.HAL_JSON_VALUE)
+                .content(content)
+                .contentType(MediaTypes.HAL_JSON_VALUE));
+
+        result.andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.email").value(UserController.errorMessages.get("constraintEmail")))
+                .andExpect(jsonPath("$.full-name").value(UserController.errorMessages.get("constraintFullname")))
+                .andExpect(jsonPath("$.room").value(UserController.errorMessages.get("constraintRoom")));
     }
 
     @Test
