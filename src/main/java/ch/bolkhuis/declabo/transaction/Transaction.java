@@ -3,6 +3,8 @@ package ch.bolkhuis.declabo.transaction;
 import ch.bolkhuis.declabo.event.Event;
 import ch.bolkhuis.declabo.fund.Fund;
 import ch.bolkhuis.declabo.submission.Submission;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.Column;
@@ -28,15 +30,25 @@ public class Transaction {
     @GeneratedValue
     protected Long id;
 
+    @JsonUnwrapped(prefix = "debtor.")
+    @JsonIgnoreProperties({"balance"})
     @NotNull
     @ManyToOne
     @JoinColumn(nullable = false)
     protected Fund debtor;
 
+    @Column(name = "debtor_id", insertable = false, updatable = false)
+    protected Long debtorId; // prevents join operations when selecting on debtor
+
+    @JsonUnwrapped(prefix = "creditor.")
+    @JsonIgnoreProperties({"balance"})
     @NotNull
     @ManyToOne
     @JoinColumn(nullable = false)
     protected Fund creditor;
+
+    @Column(name = "creditor_id", insertable = false, updatable = false)
+    protected Long creditorId; // prevents join operations when selecting on creditor
 
     @Positive
     protected long amount;
