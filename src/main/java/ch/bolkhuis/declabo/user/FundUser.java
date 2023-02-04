@@ -1,6 +1,7 @@
 package ch.bolkhuis.declabo.user;
 
 import ch.bolkhuis.declabo.fund.CreditFund;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.lang.Nullable;
 
@@ -16,6 +17,7 @@ import java.util.Objects;
 public class FundUser extends User {
 
     @NotNull
+    @JsonUnwrapped(prefix = "fund.")
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "fund_id")
     protected CreditFund fund;
