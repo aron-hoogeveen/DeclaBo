@@ -34,19 +34,21 @@ public class EventRepositoryTest {
         String name = "My Event";
         LocalDate date = LocalDate.now();
         String description = "my description";
-        Event event = repository.save(new Event(name, date, description));
+        State state = State.CLOSED;
+        Event event = repository.save(new Event(name, date, description, state));
 
         assertThat(event).hasFieldOrPropertyWithValue("name", name);
         assertThat(event).hasFieldOrPropertyWithValue("date", date);
         assertThat(event).hasFieldOrPropertyWithValue("description", description);
+        assertThat(event).hasFieldOrPropertyWithValue("state", state);
     }
 
     @Test
     public void should_reject_save_on_duplicate_name() {
         String name = "My Event";
 
-        Event e1 = new Event(name, LocalDate.of(2022, 1, 1), "yes");
-        Event e2 = new Event(name, LocalDate.of(1099, 1, 1), "no");
+        Event e1 = new Event(name, LocalDate.of(2022, 1, 1), "yes", State.OPEN);
+        Event e2 = new Event(name, LocalDate.of(1099, 1, 1), "no", State.OPEN);
         assertThrows(DataIntegrityViolationException.class, () -> repository.saveAllAndFlush(List.of(e1, e2)));
     }
 

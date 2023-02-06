@@ -36,25 +36,40 @@ public class TransactionControllerTest {
     //CHECKSTYLE:ON
 
     /*
+     * Requirements.
+     *
+     * How does a serialized Transaction look like?
      * {
      *    "id": 0,
      *    "debtor.id": 2,
-     *    "debtor.name": "Aron",
+     *    "debtor.name": "Voorraad",
      *    "creditor.id" 3,
-     *    "creditor.name": "Huisch",
+     *    "creditor.name": "Aron",
      *    "amount": 56.99,
      *    "date": "2023-02-04",
-     *    "description": "Makrorun algemene voorraad",
-     *    "submission": null,
-     *    "event": null,
+     *    "description": "inkoop voorraad",
+     *    "submission.id": 4,
+     *    "submission.name": "Makrorun algemene voorraad",
+     *    "event.id": null,
+     *    "event.name": null,
      *    "settled": false
      * }
+     * What does it look like when there is no submission? Will the field SUBMISSION.ID be null?
+     *
+     * What are some of the requirements?
+     *   - If the transaction belongs to a submission, at least one of DEBTOR of CREDITOR must be
+     *     equal to the paying party of that submission.
+     *   - If the transaction belongs to an event, it cannot be created if the state of that event
+     *     is _not_ OPEN. TODO create states for the events
+     *   - If the transaction belongs to a submission, it cannot be created if the state of that
+     *     submission is _not_ IN_PROGRESS.
+     *   - Settled transactions cannot be changed whatsoever.
      */
 
     private void verifySingleJson(ResultActions action, Transaction transaction) throws Exception {
         action.andDo(print())
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
-                .andExpect(jsonPath("$.id").value(transaction.getId()))
-                .andExpect(jsonPath("$.debtor."))
+                .andExpect(jsonPath("$.id").value(transaction.getId()));
+//                .andExpect(jsonPath("$.debtor."))
     }
 }

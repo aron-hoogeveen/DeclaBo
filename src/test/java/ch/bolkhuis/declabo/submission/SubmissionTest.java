@@ -2,6 +2,7 @@ package ch.bolkhuis.declabo.submission;
 
 import ch.bolkhuis.declabo.event.Event;
 import ch.bolkhuis.declabo.event.EventTest;
+import ch.bolkhuis.declabo.event.State;
 import ch.bolkhuis.declabo.fund.CreditFund;
 import ch.bolkhuis.declabo.user.FundUser;
 import ch.bolkhuis.declabo.user.FundUserTest;
@@ -22,7 +23,7 @@ public class SubmissionTest {
     private final LocalDate date = LocalDate.of(2021, 12, 24);
     private final FundUser paidBy = new FundUser("john@bolkhuis.ch", "John", "Smith", null, 404,
             new CreditFund("John Smith", 0L));
-    private final Event event = new Event("Default Event", LocalDate.of(2021, 12, 24), "Super Epic Event.");
+    private final Event event = new Event("Default Event", LocalDate.of(2021, 12, 24), "Super Epic Event.", State.OPEN);
     private final String name = "Default Submission";
     private final String remarks = "Default remarks";
     private final Status status = Status.BEING_CREATED;

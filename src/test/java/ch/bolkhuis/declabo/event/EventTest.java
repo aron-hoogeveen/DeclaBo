@@ -20,16 +20,18 @@ public class EventTest {
         String name = "My Event";
         LocalDate date = LocalDate.now();
         String description = "my description";
-        Event event = new Event(name, date, description);
+        State state = State.OPEN;
+        Event event = new Event(name, date, description, state);
 
         assertThat(event).hasFieldOrPropertyWithValue("name", name);
         assertThat(event).hasFieldOrPropertyWithValue("date", date);
         assertThat(event).hasFieldOrPropertyWithValue("description", description);
+        assertThat(event).hasFieldOrPropertyWithValue("state", state);
     }
 
     @Test
     public void should_save_attendant_when_added() {
-        Event event = new Event("name", LocalDate.now(), "description");
+        Event event = new Event("name", LocalDate.now(), "description", State.OPEN);
         FundUser attendant = FundUserTest.getTestCreditFundUser();
         event.addAttendant(attendant);
 
@@ -70,7 +72,7 @@ public class EventTest {
     }
 
     public static Event getTestEvent() {
-        return new Event("Test Event", LocalDate.now(), "This is a test event.");
+        return new Event("Test Event", LocalDate.now(), "This is a test event.", State.OPEN);
     }
 
 }

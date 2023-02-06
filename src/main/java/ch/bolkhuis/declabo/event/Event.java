@@ -2,7 +2,6 @@ package ch.bolkhuis.declabo.event;
 
 import ch.bolkhuis.declabo.fund.EventFund;
 import ch.bolkhuis.declabo.user.FundUser;
-import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,11 +11,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+// TODO add validation constraints
 @Entity
 public class Event {
 
@@ -44,6 +45,12 @@ public class Event {
     // shitload of EventFunds
     protected Set<EventFund> funds;
 
+    /**
+     * The current state of the event.
+     */
+    @NotNull
+    protected State state;
+
     protected Event() {}
 
     /**
@@ -52,13 +59,16 @@ public class Event {
      * @param name the name
      * @param date the (starting) date
      * @param description a descriptive message
+     * @param state the current state of the event
      */
-    public Event(@NotNull String name, @NotNull LocalDate date, @NotNull String description) {
+    public Event(@NotNull String name, @NotNull LocalDate date, @NotNull String description,
+                 @NotNull State state) {
         this.name = Objects.requireNonNull(name);
         this.date = Objects.requireNonNull(date);
         this.description = Objects.requireNonNull(description);
         this.attendants = new HashSet<>();
         this.funds = new HashSet<>();
+        this.state = Objects.requireNonNull(state);
     }
 
     /**
@@ -72,14 +82,16 @@ public class Event {
      * @param description a descriptive message
      * @param attendants a set of all attendants
      * @param funds a set of all event funds belonging to this event
+     * @param state the current state of the event
      */
     public Event(@NotNull String name, @NotNull LocalDate date, @NotNull String description,
-                 @NotNull Set<FundUser> attendants, Set<EventFund> funds) {
+                 @NotNull State state, @NotNull Set<FundUser> attendants, Set<EventFund> funds) {
         this.name = Objects.requireNonNull(name);
         this.date = Objects.requireNonNull(date);
         this.description = Objects.requireNonNull(description);
         this.attendants = new HashSet<>(Objects.requireNonNull(attendants));
         this.funds = new HashSet<>(Objects.requireNonNull(funds));
+        this.state = Objects.requireNonNull(state);
     }
 
     public Long getId() {
@@ -114,6 +126,14 @@ public class Event {
 
     public void setDescription(String description) {
         this.description = Objects.requireNonNull(description);
+    }
+
+    public @NotNull State getState() {
+        return state;
+    }
+
+    public void setState(@NotNull State state) {
+        this.state = Objects.requireNonNull(state);
     }
 
     @NotNull
